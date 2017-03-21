@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WebApiTest4.Models;
+using WebApiTest4.Models.EgeModels;
 
 namespace WebApiTest4.Providers
 {
@@ -31,7 +32,7 @@ namespace WebApiTest4.Providers
         {
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
 
-            ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
+            User user = await userManager.FindAsync(context.UserName, context.Password);
 
             if (user == null)
             {
@@ -39,12 +40,10 @@ namespace WebApiTest4.Providers
                 return;
             }
 
-            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
-               OAuthDefaults.AuthenticationType);
-            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
-                CookieAuthenticationDefaults.AuthenticationType);
+            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager);
+            ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager);
 
-            AuthenticationProperties properties = CreateProperties(user.UserName);
+            AuthenticationProperties properties = CreatePropertiesId(user.Id);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
             context.Validated(ticket);
             context.Request.Context.Authentication.SignIn(cookiesIdentity);
@@ -91,6 +90,14 @@ namespace WebApiTest4.Providers
             IDictionary<string, string> data = new Dictionary<string, string>
             {
                 { "userName", userName }
+            };
+            return new AuthenticationProperties(data);
+        }
+        public static AuthenticationProperties CreatePropertiesId(int userId)
+        {
+            IDictionary<string, string> data = new Dictionary<string, string>
+            {
+                { "id", userId.ToString() }
             };
             return new AuthenticationProperties(data);
         }

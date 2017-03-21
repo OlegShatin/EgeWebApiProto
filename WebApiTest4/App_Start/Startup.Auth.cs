@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using WebApiTest4.Providers;
 using WebApiTest4.Models;
+using WebApiTest4.Models.EgeModels;
 
 namespace WebApiTest4
 {
@@ -23,7 +24,7 @@ namespace WebApiTest4
         public void ConfigureAuth(IAppBuilder app)
         {
             // Настройка контекста базы данных и диспетчера пользователей для использования одного экземпляра на запрос
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(EgeDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 
             // Включение использования файла cookie, в котором приложение может хранить информацию для пользователя, выполнившего вход,
@@ -35,9 +36,9 @@ namespace WebApiTest4
             PublicClientId = "self";
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
-                TokenEndpointPath = new PathString("/Token"),
+                TokenEndpointPath = new PathString("/api/v1/Account/Login"),
                 Provider = new ApplicationOAuthProvider(PublicClientId),
-                AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
+                AuthorizeEndpointPath = new PathString("/api/v1/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 // В рабочем режиме задайте AllowInsecureHttp = false
                 AllowInsecureHttp = true

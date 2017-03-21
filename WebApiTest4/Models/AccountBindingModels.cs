@@ -35,8 +35,19 @@ namespace WebApiTest4.Models
     public class RegisterBindingModel
     {
         [Required]
+        [Display(Name = "ФИО")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+
+        [Required]
         [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
+
+        [Display(Name = "Аватар")]
+        public string Avatar { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
@@ -44,10 +55,10 @@ namespace WebApiTest4.Models
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Подтверждение пароля")]
-        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
-        public string ConfirmPassword { get; set; }
+        //[DataType(DataType.Password)]
+        //[Display(Name = "Подтверждение пароля")]
+        //[Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        //public string ConfirmPassword { get; set; }
     }
 
     public class RegisterExternalBindingModel
@@ -55,6 +66,8 @@ namespace WebApiTest4.Models
         [Required]
         [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
     }
 
     public class RemoveLoginBindingModel

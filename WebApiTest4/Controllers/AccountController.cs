@@ -14,13 +14,14 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WebApiTest4.Models;
+using WebApiTest4.Models.EgeModels;
 using WebApiTest4.Providers;
 using WebApiTest4.Results;
 
 namespace WebApiTest4.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/Account")]
+    [RoutePrefix("api/v1/Account")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -78,7 +79,7 @@ namespace WebApiTest4.Controllers
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
-            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            IdentityUser<int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk> user = await UserManager.FindByIdAsync(int.Parse(User.Identity.GetUserId()));
 
             if (user == null)
             {
@@ -87,7 +88,7 @@ namespace WebApiTest4.Controllers
 
             List<UserLoginInfoViewModel> logins = new List<UserLoginInfoViewModel>();
 
-            foreach (IdentityUserLogin linkedAccount in user.Logins)
+            foreach (UserLoginIntPk linkedAccount in user.Logins)
             {
                 logins.Add(new UserLoginInfoViewModel
                 {
@@ -123,7 +124,7 @@ namespace WebApiTest4.Controllers
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+            IdentityResult result = await UserManager.ChangePasswordAsync(int.Parse(User.Identity.GetUserId()), model.OldPassword,
                 model.NewPassword);
             
             if (!result.Succeeded)
@@ -143,7 +144,7 @@ namespace WebApiTest4.Controllers
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+            IdentityResult result = await UserManager.AddPasswordAsync(int.Parse(User.Identity.GetUserId()), model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -180,7 +181,7 @@ namespace WebApiTest4.Controllers
                 return BadRequest("Внешнее имя входа уже связано с учетной записью.");
             }
 
-            IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
+            IdentityResult result = await UserManager.AddLoginAsync(int.Parse(User.Identity.GetUserId()),
                 new UserLoginInfo(externalData.LoginProvider, externalData.ProviderKey));
 
             if (!result.Succeeded)
@@ -204,11 +205,11 @@ namespace WebApiTest4.Controllers
 
             if (model.LoginProvider == LocalLoginProvider)
             {
-                result = await UserManager.RemovePasswordAsync(User.Identity.GetUserId());
+                result = await UserManager.RemovePasswordAsync(int.Parse(User.Identity.GetUserId()));
             }
             else
             {
-                result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(),
+                result = await UserManager.RemoveLoginAsync(int.Parse(User.Identity.GetUserId()),
                     new UserLoginInfo(model.LoginProvider, model.ProviderKey));
             }
 
@@ -250,7 +251,7 @@ namespace WebApiTest4.Controllers
                 return new ChallengeResult(provider, this);
             }
 
-            ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
+            User user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
                 externalLogin.ProviderKey));
 
             bool hasRegistered = user != null;
@@ -259,12 +260,10 @@ namespace WebApiTest4.Controllers
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
                 
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
-                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    CookieAuthenticationDefaults.AuthenticationType);
+                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager);
+                ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager);
 
-                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+                AuthenticationProperties properties = ApplicationOAuthProvider.CreatePropertiesId(user.Id);
                 Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
             }
             else
@@ -318,9 +317,9 @@ namespace WebApiTest4.Controllers
             return logins;
         }
 
-        // POST api/Account/Register
+        // POST api/Account/Signup
         [AllowAnonymous]
-        [Route("Register")]
+        [Route("Signup")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -328,7 +327,11 @@ namespace WebApiTest4.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new User() {
+                UserName = model.UserName,
+                Email = model.Email,
+                Avatar = model.Avatar
+            };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -357,7 +360,7 @@ namespace WebApiTest4.Controllers
                 return InternalServerError();
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new User() { UserName = model.UserName, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user);
             if (!result.Succeeded)
