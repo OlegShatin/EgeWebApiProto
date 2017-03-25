@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.0.9.9\lib\net45\AngleSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -219,12 +223,22 @@
     <Compile Include="Migrations\201703212155198_Init2.Designer.cs">
       <DependentUpon>201703212155198_Init2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703250019099_added-models.cs" />
+    <Compile Include="Migrations\201703250019099_added-models.Designer.cs">
+      <DependentUpon>201703250019099_added-models.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EgeModels\EgeDbContext.cs" />
+    <Compile Include="Models\EgeModels\EgeTask.cs" />
+    <Compile Include="Models\EgeModels\TaskTopic.cs" />
+    <Compile Include="Models\EgeModels\Train.cs" />
+    <Compile Include="Models\EgeModels\TrainType.cs" />
     <Compile Include="Models\EgeModels\User.cs" />
+    <Compile Include="Models\EgeModels\UserTaskAttempt.cs" />
     <Compile Include="Models\IdentityModules.cs" />
+    <Compile Include="Parsing\Scanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -280,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703212155198_Init2.resx">
       <DependentUpon>201703212155198_Init2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703250019099_added-models.resx">
+      <DependentUpon>201703250019099_added-models.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

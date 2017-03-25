@@ -28,5 +28,11 @@ namespace WebApiTest4.Models.EgeModels
 
 
         }
+
+        public virtual DbSet<TrainType> TrainTypes { get; set; }
+        public virtual DbSet<TaskTopic> TaskTopics { get; set; }
+        public virtual DbSet<EgeTask> Tasks { get; set; }
+        public virtual DbSet<Train> Trains { get; set; }
+        public virtual DbSet<UserTaskAttempt> UserTaskAttempts { get; set; }
     }
 }

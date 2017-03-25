@@ -47,7 +47,7 @@ namespace WebApiTest4.Models
     //// You can add profile data for the user by adding more properties to your User class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     //public class User : IdentityUser<int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     //{
-    //    public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
+    //    public async EgeTask<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
     //    {
     //        // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
     //        var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
