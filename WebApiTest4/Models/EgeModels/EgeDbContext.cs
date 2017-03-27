@@ -1,5 +1,6 @@
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WebApiTest4.Parsing;
 
 namespace WebApiTest4.Models.EgeModels
 {
@@ -9,11 +10,16 @@ namespace WebApiTest4.Models.EgeModels
         public EgeDbContext()
             : base("DefaultConnection")
         {
+            
+            //Database.SetInitializer(new DropCreateDatabaseAlways<EgeDbContext>());
         }
         
         public static EgeDbContext Create()
         {
-            return new EgeDbContext();
+            var result = new EgeDbContext();
+            Scanner scanner = new Scanner();
+            scanner.addNewTasks(result);
+            return result;
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
