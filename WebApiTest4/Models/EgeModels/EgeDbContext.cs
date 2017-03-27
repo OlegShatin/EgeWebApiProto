@@ -18,7 +18,8 @@ namespace WebApiTest4.Models.EgeModels
         {
             var result = new EgeDbContext();
             Scanner scanner = new Scanner();
-            scanner.addNewTasks(result);
+            var synchTask = scanner.AddNewTasks(result);
+            synchTask.Wait();
             return result;
         }
 
