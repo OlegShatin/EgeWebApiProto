@@ -19,7 +19,7 @@ namespace WebApiTest4.Models.EgeModels
             return userIdentity;
         }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public string Name { get; set; }
         public string Avatar { get; set; }
         [DefaultValue(0)]
@@ -27,6 +27,7 @@ namespace WebApiTest4.Models.EgeModels
         [DefaultValue(0)]
         public int UsePoints { get; set; }
 
-        public List<Train> Trains { get; set; }
+        public virtual List<Train> Trains { get; set; }
+        public virtual List<Badge> Badges { get; set; }
     }
 }

@@ -17,9 +17,9 @@ namespace WebApiTest4.Models.EgeModels
         public static EgeDbContext Create()
         {
             var result = new EgeDbContext();
-            Scanner scanner = new Scanner();
-            var synchTask = scanner.AddNewTasks(result);
-            synchTask.Wait();
+            //Scanner scanner = new Scanner();
+            //var synchTask = scanner.AddNewTasks(result);
+            //synchTask.Wait();
             return result;
         }
 
@@ -41,5 +41,6 @@ namespace WebApiTest4.Models.EgeModels
         public virtual DbSet<EgeTask> Tasks { get; set; }
         public virtual DbSet<Train> Trains { get; set; }
         public virtual DbSet<UserTaskAttempt> UserTaskAttempts { get; set; }
+        public virtual DbSet<Badge> Badges { get; set; }
     }
 }

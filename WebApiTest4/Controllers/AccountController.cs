@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
@@ -330,7 +331,8 @@ namespace WebApiTest4.Controllers
             var user = new User() {
                 UserName = model.UserName,
                 Email = model.Email,
-                Avatar = model.Avatar
+                Avatar = model.Avatar,
+                CreatedAt = DateTime.Now
             };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
@@ -339,8 +341,17 @@ namespace WebApiTest4.Controllers
             {
                 return GetErrorResult(result);
             }
-
+            var grantType = "password";
             return Ok();
+            //return RedirectToRoute(
+            //    "api/v1/account/login",
+            //    new ConcurrentDictionary<string, object>(
+            //        new KeyValuePair<string, object>[]
+            //        {
+            //            new KeyValuePair<string, object>("grant_type",grantType),
+            //            new KeyValuePair<string, object>("username", user.UserName),
+            //            new KeyValuePair<string, object>("password", model.Password),
+            //        }));
         }
 
         // POST api/Account/RegisterExternal
