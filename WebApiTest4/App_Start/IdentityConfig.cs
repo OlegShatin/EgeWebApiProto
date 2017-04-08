@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using WebApiTest4.Models;
 using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Services.Impls;
 
 namespace WebApiTest4
 {
@@ -50,7 +51,7 @@ namespace WebApiTest4
             : base(store)
         {
         }
-
+        
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
             IOwinContext context)
         {
@@ -79,7 +80,7 @@ namespace WebApiTest4
                 Subject = "Security Code",
                 BodyFormat = "Your security code is: {0}"
             });
-            //manager.EmailService = new EmailService();
+            manager.EmailService = new EmailServiceImpl();
             //manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)

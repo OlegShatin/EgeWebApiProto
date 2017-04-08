@@ -94,4 +94,15 @@ namespace WebApiTest4.Models
         [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
+    public class ResetPasswordBindingModel
+    {
+        [Required]
+        public string Code { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
+        public string Password { get; set; }
+    }
 }

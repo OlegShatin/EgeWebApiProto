@@ -72,6 +72,7 @@ namespace WebApiTest4.Controllers
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
+            
             Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
@@ -321,7 +322,7 @@ namespace WebApiTest4.Controllers
         // POST api/Account/Signup
         [AllowAnonymous]
         [Route("Signup")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register([FromBody]RegisterBindingModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -383,6 +384,60 @@ namespace WebApiTest4.Controllers
             if (!result.Succeeded)
             {
                 return GetErrorResult(result); 
+            }
+            return Ok();
+        }
+
+        // POST api/v1/Account/ForgotPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Forgot")]
+        public async Task<IHttpActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await UserManager.FindByEmailAsync(model.Email);
+                // If user has to activate his email to confirm his account, the use code listing below
+                //if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                //{
+                //    return Ok();
+                //}
+                if (user == null)
+                {
+                    return Ok();
+                }
+
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", $"Please reset your password by using this {code}");
+                return Ok();
+            }
+
+            // If we got this far, something failed, redisplay form
+            return BadRequest(ModelState);
+        }
+
+        // POST api/v1/Account/ResetPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Reset")]
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return Ok();
+            }
+            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok();
             }
             return Ok();
         }
