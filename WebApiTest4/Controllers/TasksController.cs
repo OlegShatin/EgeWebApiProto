@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web.Http;
 using WebApiTest4.EgeViewModels;
 using WebApiTest4.Services;
@@ -18,11 +19,14 @@ namespace WebApiTest4.Controllers
         {
             _taskService = taskService;
         }
-        // GET: api/Tasks
-        //public IEnumerable<EgeTaskViewModel> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+
+        const int defaultLimit = 20;
+        //GET: api/Tasks?
+        public IEnumerable<EgeTaskViewModel> Get([FromUri]int? topic_id, [FromUri]int? offset, [FromUri]int? limit)
+        {
+            
+            return _taskService.GetSortedTasks(topic_id, offset ?? 0, limit ?? defaultLimit);
+        }
 
         // GET: api/Tasks/5
         public EgeTaskViewModel Get(int id)

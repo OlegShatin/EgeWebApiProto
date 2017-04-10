@@ -87,6 +87,7 @@ namespace WebApiTest4
             {
                 manager.UserTokenProvider = new DataProtectorTokenProvider<User, int>
                                             (dataProtectionProvider.Create("ASP.NET Identity"));
+                
             }
             return manager;
         }

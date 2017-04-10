@@ -10,5 +10,6 @@ namespace WebApiTest4.Services
     public interface ITaskService
     {
         EgeTaskViewModel GetTask(int id);
+        IEnumerable<EgeTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit);
     }
 }

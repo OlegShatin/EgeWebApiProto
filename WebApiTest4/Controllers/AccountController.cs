@@ -328,20 +328,31 @@ namespace WebApiTest4.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
             var user = new User() {
                 UserName = model.UserName,
                 Email = model.Email,
                 Avatar = model.Avatar,
                 CreatedAt = DateTime.Now
+                
             };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
+            
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
+            else
+            {
+                await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "student"));
+                //var id = UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ExternalBearer).Result;
+                //id.AddClaim();
+
+                //var i = id.Claims;
+
+            }
+            
             var grantType = "password";
             return Ok();
             //return RedirectToRoute(

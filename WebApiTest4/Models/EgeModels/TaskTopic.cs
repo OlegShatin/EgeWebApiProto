@@ -9,9 +9,10 @@ using System.Web;
 
 namespace WebApiTest4.Models.EgeModels
 {
+    
     [Table("TaskTopic")]
-    public class TaskTopic
-    {
+    public class TaskTopic{
+        
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [MaxLength(250)]
@@ -20,8 +21,11 @@ namespace WebApiTest4.Models.EgeModels
         public int Number { get; set; }
         [DefaultValue(0)]
         public int PointsPerTask { get; set; }
+        [Required]
+        [DefaultValue(false)]
+        public bool IsShort { get; set; }
 
         public virtual List<EgeTask> EgeTasks { get; set; }
-
+        
     }
 }

@@ -12,7 +12,10 @@ namespace WebApiTest4.EgeViewModels
         {
             Id = sourseTask.Id;
             Text = sourseTask.Text;
+            EgeTopicViewModel = new EgeTopicViewModel(sourseTask.Topic);
         }
+
+        public EgeTopicViewModel EgeTopicViewModel { get; set; }
         public int Id { get; private set; }
         public string Text { get; private set; }
 

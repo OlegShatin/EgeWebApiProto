@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Threading.Tasks;
 using System.Web;
 using AngleSharp;
@@ -11,18 +14,10 @@ namespace WebApiTest4.Parsing
 {
     public class Scanner
     {
-        public static void Main(string[] args)
-        {
-            using (var dbcontext = new EgeDbContext())
-            {
-
-            }
-
-        }
-
+        
         public async Task AddNewTasks(EgeDbContext egeDbContext)
         {
-
+            CreateEgeTasksTopics(egeDbContext);
             var config = Configuration.Default.WithDefaultLoader();
             const int numberOfVariants = 20;
             for (int i = 1; i <= numberOfVariants; i++)
@@ -44,13 +39,13 @@ namespace WebApiTest4.Parsing
                         int numStartPoint = result.IndexOf(numberPrefix) + numberPrefix.Length;
                         int textStartPoint = result.IndexOf(textPrexfix) + textPrexfix.Length;
                         var newTopic = new TaskTopic() { Name = "DefaultName" + orderNum, Number = orderNum, PointsPerTask = 0 };
-                        if (!egeDbContext.TaskTopics.Any(x => x.Number == newTopic.Number))
+                        if (!egeDbContext.TaskTopics.Local.Any(x => x.Number == newTopic.Number))
                         {
                             egeDbContext.TaskTopics.Local.Add(newTopic);
                         }
                         else
                         {
-                            newTopic = egeDbContext.TaskTopics.FirstOrDefault(x => x.Number == newTopic.Number);
+                            newTopic = egeDbContext.TaskTopics.Local.FirstOrDefault(x => x.Number == newTopic.Number);
                         }
                         var newTask = new EgeTask()
                         {
@@ -78,6 +73,31 @@ namespace WebApiTest4.Parsing
 
 
 
+        }
+
+        private const int countOfTopics = 27;
+        private const int freeAnswerTasksStartsCount = 24;
+        private void CreateEgeTasksTopics(EgeDbContext egeDbContext)
+        {
+            var rm = new ResourceManager("WebApiTest4.Parsing.Topics", Assembly.GetExecutingAssembly());
+            for (int i = 1; i <= countOfTopics; i++)
+            {
+
+                var topic = egeDbContext
+                    .TaskTopics
+                    .FirstOrDefault(x => x.Id == i);
+                if (topic != null)
+                {
+                    topic
+                        .Name = rm.GetString("s" + i);
+                    if (i < freeAnswerTasksStartsCount)
+                    {
+                        topic.IsShort = true;
+                    }
+                }
+                    
+
+            }
         }
     }
 }
