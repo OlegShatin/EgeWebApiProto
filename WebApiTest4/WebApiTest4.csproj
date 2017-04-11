@@ -251,6 +251,7 @@
     <Compile Include="EgeViewModels\BadgeViewModel.cs" />
     <Compile Include="EgeViewModels\EgeTopicViewModel.cs" />
     <Compile Include="EgeViewModels\EgeTaskViewModel.cs" />
+    <Compile Include="EgeViewModels\BindingModels\TaskAnswerViewModel.cs" />
     <Compile Include="EgeViewModels\UserViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

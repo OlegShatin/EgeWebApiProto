@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApiTest4.Models.EgeModels
 {
+    enum TrainTypes
+    {
+        EGE, ONE_TOPIC, FREETRAIN
+    }
     [Table("TrainType")]
     public class TrainType
     {

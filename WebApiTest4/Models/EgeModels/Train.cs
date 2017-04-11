@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,6 +27,8 @@ namespace WebApiTest4.Models.EgeModels
 
         [Required]
         public virtual User User { get; set; }
+
+        public virtual List<UserTaskAttempt> TaskAttempts { get; set; } = new List<UserTaskAttempt>();
     }
 
 }

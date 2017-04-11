@@ -10,14 +10,18 @@ namespace WebApiTest4.EgeViewModels
     {
         public EgeTaskViewModel(EgeTask sourseTask)
         {
-            Id = sourseTask.Id;
-            Text = sourseTask.Text;
-            EgeTopicViewModel = new EgeTopicViewModel(sourseTask.Topic);
+            id = sourseTask.Id;
+            text = sourseTask.Text;
+            //EgeTopicViewModel = new EgeTopicViewModel(sourseTask.Topic);
+            topic_id = sourseTask.Topic.Id;
+            type = sourseTask.Topic.IsShort ? 0 : 1;
         }
 
+        public int topic_id { get; set; }
+        public int type { get; set; }
         public EgeTopicViewModel EgeTopicViewModel { get; set; }
-        public int Id { get; private set; }
-        public string Text { get; private set; }
+        public int id { get; private set; }
+        public string text { get; private set; }
 
 
     }
