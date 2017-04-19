@@ -41,27 +41,24 @@ namespace WebApiTest4.Services.Impls
             
         }
 
-        public IEnumerable<int> CheckAnswers(IEnumerable<TaskAnswerBindingModel> answers, int userId)
+        public IEnumerable<int> CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId)
         {
-            //todo: remove mock
-            return new List<int>();
-            /*
+                       
+            
             var correctIds = new List<int>();
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                var train = new Train()
-                {
-                    Type = new TrainType()
-                    {
-                        Name = TrainTypes.FREETRAIN.ToString()
-                    },
-                    StartTime = DateTime.Now,
-                    FinishTime = DateTime.Now,
-                    User = user
-                };
+                var train = GetTrainByType(trainType);
+                if (train == null) return correctIds;
+
+                train.StartTime = DateTime.Now;
+                train.FinishTime = DateTime.Now;
+                train.User = user;
                 user.Trains.Add(train);
                 _dbContext.Trains.Add(train);
+
+
                 foreach (var answer in answers)
                 {
                     var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == answer.id);
@@ -85,7 +82,28 @@ namespace WebApiTest4.Services.Impls
             }
             _dbContext.SaveChanges();
             return correctIds;
-            */
+            
+        }
+
+        private static Train GetTrainByType(string trainType)
+        {
+            Train train;
+            if (trainType.ToLower().Equals("free"))
+            {
+                train = new FreeTrain();
+            }
+            else
+            {
+                if (trainType.ToLower().Equals("ege"))
+                {
+                    train = new EgeTrain();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return train;
         }
 
         private bool RatedAnswerIsCorrect(EgeTask task, UserTaskAttempt attempt)

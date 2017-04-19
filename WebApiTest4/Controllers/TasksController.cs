@@ -40,13 +40,14 @@ namespace WebApiTest4.Controllers
             return _taskService.GetTask(id);
         }
 
-        public async Task<IHttpActionResult> PostCheck(IEnumerable<TaskAnswerBindingModel> answers)
+        public async Task<IHttpActionResult> PostCheck(TaskAnswersSetBindingModel answers)
         {
-            if (answers.Any() && ModelState.IsValid)
+            if (answers.list.Any() && ModelState.IsValid)
             {
                 var result = _taskService
                     .CheckAnswers(
-                        answers,
+                        answers.train_type,
+                        answers.list,
                         User
                             .Identity
                             .GetUserId<int>()

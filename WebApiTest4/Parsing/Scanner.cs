@@ -104,9 +104,23 @@ namespace WebApiTest4.Parsing
                 {
                     topic
                         .Name = rm.GetString("s" + i);
+                    
                     if (i < freeAnswerTasksStartsCount)
                     {
+                        topic.PointsPerTask = 1;
                         topic.IsShort = true;
+                    }
+                    else
+                    {
+                        topic.PointsPerTask = 3;
+                        if (i == 25)
+                        {
+                            topic.PointsPerTask = 2;
+                        }
+                        if (i == 27)
+                        {
+                            topic.PointsPerTask = 4;
+                        }
                     }
                 }
                     

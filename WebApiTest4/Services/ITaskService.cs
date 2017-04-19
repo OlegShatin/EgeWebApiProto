@@ -13,6 +13,6 @@ namespace WebApiTest4.Services
     {
         EgeTaskViewModel GetTask(int id);
         IEnumerable<EgeTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit);
-        IEnumerable<int> CheckAnswers(IEnumerable<TaskAnswerBindingModel> answers, int userId);
+        IEnumerable<int> CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId);
     }
 }

@@ -11,6 +11,8 @@ namespace WebApiTest4.EgeViewModels.BindingModels
     {
         [Required]
         public List<TaskAnswerBindingModel> list { get; set; }
+        [Required]
+        public string train_type { get; set; }
     }
     public class TaskAnswerBindingModel
     {

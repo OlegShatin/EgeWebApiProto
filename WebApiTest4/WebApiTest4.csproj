@@ -289,6 +289,14 @@
     <Compile Include="Migrations\201704190601566_trains-types-refactored.Designer.cs">
       <DependentUpon>201704190601566_trains-types-refactored.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704190918142_bug-fixed.cs" />
+    <Compile Include="Migrations\201704190918142_bug-fixed.Designer.cs">
+      <DependentUpon>201704190918142_bug-fixed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704190955208_bug-fixed3.cs" />
+    <Compile Include="Migrations\201704190955208_bug-fixed3.Designer.cs">
+      <DependentUpon>201704190955208_bug-fixed3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -391,6 +399,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704190601566_trains-types-refactored.resx">
       <DependentUpon>201704190601566_trains-types-refactored.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704190918142_bug-fixed.resx">
+      <DependentUpon>201704190918142_bug-fixed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704190955208_bug-fixed3.resx">
+      <DependentUpon>201704190955208_bug-fixed3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Parsing\Topics.resx">
       <Generator>ResXFileCodeGenerator</Generator>

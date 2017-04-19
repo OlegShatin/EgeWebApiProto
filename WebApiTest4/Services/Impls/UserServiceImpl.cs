@@ -16,29 +16,37 @@ namespace WebApiTest4.Services.Impls
         }
         public UserViewModel GetUser(int id)
         {
-            //todo: remove mock
-            return new UserViewModel(new User(), 0,0);
-            /*
-            return
-                _context.Users
-                    .OrderBy(x => x.Trains.Sum(t => t.TaskAttempts.Sum(a => a.Points)))
-                    .ToList()
-                    .Select((x, i) => new UserViewModel(x, (i + 1)))
-                    .FirstOrDefault(x => x.id == id);
-                    */
+           return  GetRatedUserViewModels().FirstOrDefault(x => x.id == id);
         }
 
         public IEnumerable<UserViewModel> GetRatingForUser(int userId)
         {
-            //todo: remove mock
-            return new List<UserViewModel>();
-            /*
+            return GetRatedUserViewModels();
+        }
+
+        private  IEnumerable<UserViewModel> GetRatedUserViewModels()
+        {
             return
                 _context.Users
-                    .OrderByDescending(x => x.Trains.Sum(t => t.TaskAttempts.Sum(a => a.Points)))
+                    .Select(
+                        x => new
+                        {
+                            user = x,
+                            points = x.EgeTrains.Sum(etr => etr.Points)
+                                     + x.FreeTrains
+                                         .SelectMany(ftr => ftr.TaskAttempts)
+                                         .GroupBy(ftta => ftta.EgeTask.Id)
+                                         .Select(g => g.Max(t => t.Points))
+                                         .Sum()
+                        }
+                    )
+                    .Where(res => res.points != null)
+                    .OrderByDescending(res => res.points)
                     .ToList()
-                    .Select((x, i) => new UserViewModel(x, (i + 1)));
-                    */
+                    .Select(
+                        (res, i) => new UserViewModel(res.user, (i + 1), res.points.Value)
+                    );
+
         }
     }
 }
