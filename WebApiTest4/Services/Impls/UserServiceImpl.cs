@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -26,26 +27,30 @@ namespace WebApiTest4.Services.Impls
 
         private  IEnumerable<UserViewModel> GetRatedUserViewModels()
         {
+            
             return
                 _context.Users
                     .Select(
                         x => new
                         {
                             user = x,
-                            points = x.EgeTrains.Sum(etr => etr.Points)
-                                     + x.FreeTrains
+                            points = x.Trains.OfType<EgeTrain>()
+                            .Sum(etr => etr.Points) ?? 0 
+                                      + x.Trains.OfType<FreeTrain>()
                                          .SelectMany(ftr => ftr.TaskAttempts)
-                                         .GroupBy(ftta => ftta.EgeTask.Id)
-                                         .Select(g => g.Max(t => t.Points))
+                                         .GroupBy(ftta => ftta.EgeTask.Id, (z, y) => new { id = z, attempts = y })
+                                         .Select(g => g.attempts.Max(t => t.Points))
                                          .Sum()
+
                         }
                     )
-                    .Where(res => res.points != null)
-                    .OrderByDescending(res => res.points)
-                    .ToList()
-                    .Select(
-                        (res, i) => new UserViewModel(res.user, (i + 1), res.points.Value)
-                    );
+                .Where(res => res.points != null)
+                .OrderByDescending(res => res.points)
+                .ToList()
+                .Select(
+                    (res, i) => new UserViewModel(res.user, (i + 1), res.points)
+                );
+            
 
         }
     }

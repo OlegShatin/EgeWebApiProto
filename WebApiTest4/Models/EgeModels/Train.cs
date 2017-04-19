@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApiTest4.Models.EgeModels
 {
-    [Table("Train")]
+    //[Table("Train")]
     public class Train
     {
         public Train()
@@ -30,13 +30,13 @@ namespace WebApiTest4.Models.EgeModels
 
         public virtual List<UserTaskAttempt> TaskAttempts { get; set; } = new List<UserTaskAttempt>();
     }
-    [Table("EgeTrain")]
+    //[Table("EgeTrain")]
     public class EgeTrain : Train
     {
         [DefaultValue(0)]
         public int? Points { get; set; }
     }
-    [Table("FreeTrain")]
+    //[Table("FreeTrain")]
     public class FreeTrain : Train
     {
         

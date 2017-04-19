@@ -55,7 +55,6 @@ namespace WebApiTest4.Services.Impls
                 train.StartTime = DateTime.Now;
                 train.FinishTime = DateTime.Now;
                 train.User = user;
-                user.Trains.Add(train);
                 _dbContext.Trains.Add(train);
 
 

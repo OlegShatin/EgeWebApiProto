@@ -27,9 +27,9 @@ namespace WebApiTest4.Models.EgeModels
         [DefaultValue(0)]
         public int UsePoints { get; set; }
 
-        public virtual List<Train> Trains { get; set; }
-        public virtual List<EgeTrain> EgeTrains{ get; set; }
-        public virtual List<FreeTrain> FreeTrains { get; set; }
+        
+        public virtual List<Train> Trains{ get; set; }
+
         public virtual List<Badge> Badges { get; set; }
     }
 }

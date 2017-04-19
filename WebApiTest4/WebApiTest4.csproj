@@ -297,6 +297,38 @@
     <Compile Include="Migrations\201704190955208_bug-fixed3.Designer.cs">
       <DependentUpon>201704190955208_bug-fixed3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704191623567_remove-trains.cs" />
+    <Compile Include="Migrations\201704191623567_remove-trains.Designer.cs">
+      <DependentUpon>201704191623567_remove-trains.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191634293_readded-trains.cs" />
+    <Compile Include="Migrations\201704191634293_readded-trains.Designer.cs">
+      <DependentUpon>201704191634293_readded-trains.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191636390_readded-trains-1.cs" />
+    <Compile Include="Migrations\201704191636390_readded-trains-1.Designer.cs">
+      <DependentUpon>201704191636390_readded-trains-1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191637373_readded-trains-2.cs" />
+    <Compile Include="Migrations\201704191637373_readded-trains-2.Designer.cs">
+      <DependentUpon>201704191637373_readded-trains-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191639490_readded-trains-3.cs" />
+    <Compile Include="Migrations\201704191639490_readded-trains-3.Designer.cs">
+      <DependentUpon>201704191639490_readded-trains-3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191640501_readded-trains-4user.cs" />
+    <Compile Include="Migrations\201704191640501_readded-trains-4user.Designer.cs">
+      <DependentUpon>201704191640501_readded-trains-4user.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191648574_readded-trains-4user-needed.cs" />
+    <Compile Include="Migrations\201704191648574_readded-trains-4user-needed.Designer.cs">
+      <DependentUpon>201704191648574_readded-trains-4user-needed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704191716419_readded-trains-5user-ref.cs" />
+    <Compile Include="Migrations\201704191716419_readded-trains-5user-ref.Designer.cs">
+      <DependentUpon>201704191716419_readded-trains-5user-ref.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -405,6 +437,30 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704190955208_bug-fixed3.resx">
       <DependentUpon>201704190955208_bug-fixed3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191623567_remove-trains.resx">
+      <DependentUpon>201704191623567_remove-trains.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191634293_readded-trains.resx">
+      <DependentUpon>201704191634293_readded-trains.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191636390_readded-trains-1.resx">
+      <DependentUpon>201704191636390_readded-trains-1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191637373_readded-trains-2.resx">
+      <DependentUpon>201704191637373_readded-trains-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191639490_readded-trains-3.resx">
+      <DependentUpon>201704191639490_readded-trains-3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191640501_readded-trains-4user.resx">
+      <DependentUpon>201704191640501_readded-trains-4user.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191648574_readded-trains-4user-needed.resx">
+      <DependentUpon>201704191648574_readded-trains-4user-needed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704191716419_readded-trains-5user-ref.resx">
+      <DependentUpon>201704191716419_readded-trains-5user-ref.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Parsing\Topics.resx">
       <Generator>ResXFileCodeGenerator</Generator>
