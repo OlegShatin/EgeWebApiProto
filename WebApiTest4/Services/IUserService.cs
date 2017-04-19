@@ -10,5 +10,6 @@ namespace WebApiTest4.Services
     public interface IUserService
     {
         UserViewModel GetUser(int id);
+        IEnumerable<UserViewModel> GetRatingForUser(int userId);
     }
 }

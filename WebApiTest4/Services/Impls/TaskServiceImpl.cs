@@ -38,11 +38,14 @@ namespace WebApiTest4.Services.Impls
                 .ToList()
                 .Select(x => new EgeTaskViewModel(x));
 
-            return null;
+            
         }
 
         public IEnumerable<int> CheckAnswers(IEnumerable<TaskAnswerBindingModel> answers, int userId)
         {
+            //todo: remove mock
+            return new List<int>();
+            /*
             var correctIds = new List<int>();
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
@@ -82,7 +85,7 @@ namespace WebApiTest4.Services.Impls
             }
             _dbContext.SaveChanges();
             return correctIds;
-
+            */
         }
 
         private bool RatedAnswerIsCorrect(EgeTask task, UserTaskAttempt attempt)

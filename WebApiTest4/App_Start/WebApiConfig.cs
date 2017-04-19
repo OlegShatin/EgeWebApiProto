@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Routing;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 
@@ -25,6 +26,15 @@ namespace WebApiTest4
                 routeTemplate: "api/v1/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultGetApi",
+            //    routeTemplate: "api/v1/{controller}/{action}/{id}",
+            //    defaults: new { action = "get", id = RouteParameter.Optional }
+            //);
+            //config.Routes.MapHttpRoute("DefaultApiWithId", "Api/{controller}/{id}", new { id = RouteParameter.Optional }, new { id = @"\d+" });
+            //config.Routes.MapHttpRoute("DefaultApiWithAction", "Api/{controller}/{action}");
+            //config.Routes.MapHttpRoute("DefaultApiGet", "Api/{controller}", new { action = "Get" }, new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) });
+
         }
     }
 }

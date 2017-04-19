@@ -330,6 +330,7 @@ namespace WebApiTest4.Controllers
             }
             
             var user = new User() {
+                Name = model.Name,
                 UserName = model.UserName,
                 Email = model.Email,
                 Avatar = model.Avatar,

@@ -17,6 +17,6 @@ namespace WebApiTest4.Models.EgeModels
         [Required]
         public virtual EgeTask EgeTask { get; set; }
         [Required]
-        public virtual Train Train { get; set; }
+        public virtual User Train { get; set; }
     }
 }

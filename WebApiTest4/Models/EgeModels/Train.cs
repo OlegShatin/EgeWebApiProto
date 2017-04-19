@@ -22,13 +22,24 @@ namespace WebApiTest4.Models.EgeModels
 
         public DateTime? FinishTime { get; set; }
 
-        [Required]
-        public virtual TrainType Type { get; set; }
+        //[Required]
+        //public virtual TrainType Type { get; set; }
 
         [Required]
         public virtual User User { get; set; }
 
         public virtual List<UserTaskAttempt> TaskAttempts { get; set; } = new List<UserTaskAttempt>();
+    }
+    [Table("EgeTrain")]
+    public class EgeTrain : Train
+    {
+        [DefaultValue(0)]
+        public int? Points { get; set; }
+    }
+    [Table("FreeTrain")]
+    public class FreeTrain : Train
+    {
+        
     }
 
 }

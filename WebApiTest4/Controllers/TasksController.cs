@@ -15,7 +15,7 @@ using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "student")]
     public class TasksController : ApiController
     {
 
