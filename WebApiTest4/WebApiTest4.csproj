@@ -247,6 +247,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
+    <Compile Include="Controllers\ThemesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="EgeViewModels\BadgeViewModel.cs" />
@@ -357,8 +358,10 @@
     </Compile>
     <Compile Include="Services\Impls\EmailServiceImpl.cs" />
     <Compile Include="Services\Impls\TaskServiceImpl.cs" />
+    <Compile Include="Services\Impls\TopicServiceImpl.cs" />
     <Compile Include="Services\Impls\UserServiceImpl.cs" />
     <Compile Include="Services\ITaskService.cs" />
+    <Compile Include="Services\ITopicService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Util\NinjectDependencyResolver.cs" />

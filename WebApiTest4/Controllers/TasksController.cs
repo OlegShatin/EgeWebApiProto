@@ -28,10 +28,17 @@ namespace WebApiTest4.Controllers
 
         const int defaultLimit = 20;
         //GET: api/Tasks?
-        public IEnumerable<EgeTaskViewModel> Get([FromUri]int? topic_id, [FromUri]int? offset, [FromUri]int? limit)
+        public IEnumerable<EgeTaskViewModel> GetByTopic([FromUri]int? topic_id, [FromUri]int? offset, [FromUri]int? limit)
         {
 
             return _taskService.GetSortedTasks(topic_id, offset ?? 0, limit ?? defaultLimit);
+        }
+        //GET: api/Tasks?
+        public IEnumerable<EgeTaskViewModel> GetByType([FromUri]int? type, [FromUri]int? offset, [FromUri]int? limit)
+        {
+
+            return new List<EgeTaskViewModel>();
+                //_taskService.GetTasksByType(type, offset ?? 0, limit ?? defaultLimit);
         }
 
         // GET: api/Tasks/5

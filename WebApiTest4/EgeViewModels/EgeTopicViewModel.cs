@@ -10,11 +10,11 @@ namespace WebApiTest4.EgeViewModels
     {
         public EgeTopicViewModel(TaskTopic sourseTopic)
         {
-            Id = sourseTopic.Id;
-            Name = sourseTopic.Name;
+            id = sourseTopic.Id;
+            title = sourseTopic.Name;
         }
-        public int Id { get; private set; }
-        public string Name { get; private set; }
+        public int id { get; private set; }
+        public string title { get; private set; }
 
 
     }
