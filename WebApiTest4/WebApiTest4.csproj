@@ -330,6 +330,10 @@
     <Compile Include="Migrations\201704191716419_readded-trains-5user-ref.Designer.cs">
       <DependentUpon>201704191716419_readded-trains-5user-ref.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704240050170_extra-constraint-dropped.cs" />
+    <Compile Include="Migrations\201704240050170_extra-constraint-dropped.Designer.cs">
+      <DependentUpon>201704240050170_extra-constraint-dropped.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -464,6 +468,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704191716419_readded-trains-5user-ref.resx">
       <DependentUpon>201704191716419_readded-trains-5user-ref.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704240050170_extra-constraint-dropped.resx">
+      <DependentUpon>201704240050170_extra-constraint-dropped.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Parsing\Topics.resx">
       <Generator>ResXFileCodeGenerator</Generator>

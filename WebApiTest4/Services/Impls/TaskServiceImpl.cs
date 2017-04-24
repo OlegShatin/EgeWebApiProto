@@ -4,6 +4,7 @@ using System.Linq;
 using WebApiTest4.EgeViewModels;
 using WebApiTest4.EgeViewModels.BindingModels;
 using WebApiTest4.Models.EgeModels;
+using WebGrease.Css.Extensions;
 
 namespace WebApiTest4.Services.Impls
 {
@@ -15,6 +16,7 @@ namespace WebApiTest4.Services.Impls
             _dbContext = context;
         }
         private EgeDbContext _dbContext;
+
         public EgeTaskViewModel GetTask(int id)
         {
             return _dbContext
@@ -23,6 +25,46 @@ namespace WebApiTest4.Services.Impls
                 .ToList()
                 .Select(x => new EgeTaskViewModel(x))
                 .FirstOrDefault();
+        }
+
+        public IEnumerable<EgeTaskViewModel> GenerateNewExamTrain(int userId)
+        {
+            var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+            if (user != null)
+            {
+                var unfinishedTrain = user.Trains.OfType<EgeTrain>().FirstOrDefault(x => x.FinishTime == null);
+                if (unfinishedTrain != null)
+                {
+                    unfinishedTrain.FinishTime = DateTime.Now;
+                }
+                EgeTrain train = new EgeTrain();
+                train.User = user;
+                train.StartTime = DateTime.Now;
+                Random rnd = new Random();
+                //get one task from each topic at fixed random examNumber position
+                var examNumber = rnd.Next(1, _dbContext.TaskTopics.First().EgeTasks.Count());
+                train.TaskAttempts = _dbContext
+                    .TaskTopics
+                    .ToList()
+                    .Select(x => new UserTaskAttempt()
+                    {
+                        EgeTask = x.EgeTasks.ElementAt(examNumber)
+                    })
+                    .ToList();
+                    
+                //save to db
+                _dbContext.Trains.Add(train);
+                _dbContext.SaveChanges();
+
+                return train
+                    .TaskAttempts
+                    .ToList()
+                    .Select(x => new EgeTaskViewModel(x.EgeTask));
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public IEnumerable<EgeTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit)
@@ -41,7 +83,7 @@ namespace WebApiTest4.Services.Impls
             
         }
 
-        public IEnumerable<int> CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId)
+        public dynamic CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId)
         {
                        
             
@@ -49,53 +91,120 @@ namespace WebApiTest4.Services.Impls
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                var train = GetTrainByType(trainType);
-                if (train == null) return correctIds;
-
-                train.StartTime = DateTime.Now;
-                train.FinishTime = DateTime.Now;
+                var train = GetTrainByType(trainType, user);
+                if (train == null) return new List<int>();
+                
                 train.User = user;
                 _dbContext.Trains.Add(train);
 
-
-                foreach (var answer in answers)
-                {
-                    var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == answer.id);
-                    if (task.Topic.IsShort)
-                    {
-                        var attempt = new UserTaskAttempt()
-                        {
-                            EgeTask = task,
-                            Train = train,
-                            UserAnswer = answer.answer,
-                            Points = RateAnswer(task, answer.answer)
-                        };
-                        train.TaskAttempts.Add(attempt);
-                        if (RatedAnswerIsCorrect(task, attempt))
-                        {
-                            correctIds.Add(task.Id);
-                        }
-                    }
-
-                }
+                return CheckAnswersByTrain(train, answers);
+                
             }
-            _dbContext.SaveChanges();
+            
             return correctIds;
             
         }
 
-        private static Train GetTrainByType(string trainType)
+        private IEnumerable<int> CheckAnswersByTrain(Train rawTrain, IEnumerable<TaskAnswerBindingModel> answers)
+        {
+            if (rawTrain.GetType() == typeof(FreeTrain))
+            {
+                return CheckFreeTrainAnswers((FreeTrain) rawTrain, answers);
+
+            }
+            else
+            {
+                if (rawTrain.GetType() == typeof(EgeTrain))
+                {
+                    return CheckEgeTrainAnswers((EgeTrain)rawTrain, answers);
+                }
+                else
+                {
+                    return new List<int>();
+                }
+            }
+        }
+
+        private dynamic CheckEgeTrainAnswers(EgeTrain train, IEnumerable<TaskAnswerBindingModel> answers)
+        {
+            //make answers join train attempts
+            var matchesAnswers = train.TaskAttempts
+                .Join(
+                    answers,
+                    attempt => attempt.EgeTask.Id,
+                    ans => ans.id,
+                    ((ta, ua) => new
+                        {
+                            answer = ua.answer,
+                            attempt = ta,
+                            task = ta.EgeTask
+                        })
+                    );
+            //get only short tasks
+            //todo: add teacher checking system for long type of task
+            var shortAnswers = matchesAnswers
+                .Where(x => x.task.Topic.IsShort);
+            //rate answers
+            shortAnswers
+                .ForEach(x => x.attempt.UserAnswer = x.answer);
+            shortAnswers
+                .ForEach(x =>x.attempt.Points = RateAnswer(x.task, x.attempt.UserAnswer));
+            //get right answers
+            //todo: debug it
+            _dbContext.SaveChanges();
+            return shortAnswers
+                .Select(x => new {task_id = x.task.Id, right_answer = x.task.Answer });
+        }
+
+        private IEnumerable<int> CheckFreeTrainAnswers(FreeTrain train, IEnumerable<TaskAnswerBindingModel> answers)
+        {
+            var correctIds = new List<int>();
+            foreach (var answer in answers)
+            {
+                var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == answer.id);
+                if (task.Topic.IsShort)
+                {
+                    var attempt = new UserTaskAttempt()
+                    {
+                        EgeTask = task,
+                        Train = train,
+                        UserAnswer = answer.answer,
+                        Points = RateAnswer(task, answer.answer)
+                    };
+                    train.TaskAttempts.Add(attempt);
+                    if (RatedAnswerIsCorrect(task, attempt))
+                    {
+                        correctIds.Add(task.Id);
+                    }
+                }
+            }
+            return correctIds;
+
+        }
+
+        private static Train GetTrainByType(string trainType, User user)
         {
             Train train;
             if (trainType.ToLower().Equals("free"))
             {
                 train = new FreeTrain();
+                train.StartTime = DateTime.Now;
+                train.FinishTime = DateTime.Now;
             }
             else
             {
                 if (trainType.ToLower().Equals("ege"))
                 {
-                    train = new EgeTrain();
+                    //searching unfinished ege trains
+                    train = user.Trains.OfType<EgeTrain>().FirstOrDefault(x => x.FinishTime == null);
+                    if (train != null)
+                    {
+                        train.FinishTime = DateTime.Now;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 else
                 {
@@ -126,5 +235,7 @@ namespace WebApiTest4.Services.Impls
                 return 0;
             }
         }
+
+        
     }
 }

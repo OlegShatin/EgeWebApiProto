@@ -31,6 +31,7 @@ namespace WebApiTest4.Util
             var context = new EgeDbContext();
             kernel.Bind<ITaskService>().To<TaskServiceImpl>().WithConstructorArgument("context", context);
             kernel.Bind<IUserService>().To<UserServiceImpl>().WithConstructorArgument("context", context);
+            kernel.Bind<ITopicService>().To<TopicServiceImpl>().WithConstructorArgument("context", context);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace WebApiTest4.Models.EgeModels
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        
         public DateTime? StartTime { get; set; }
 
         public DateTime? FinishTime { get; set; }

@@ -26,6 +26,11 @@ namespace WebApiTest4
                 routeTemplate: "api/v1/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            config.Routes.MapHttpRoute(
+                name: "ActionApi",
+                routeTemplate: "api/v1/{controller}/{action}/"
+            );
+
             //config.Routes.MapHttpRoute(
             //    name: "DefaultGetApi",
             //    routeTemplate: "api/v1/{controller}/{action}/{id}",
