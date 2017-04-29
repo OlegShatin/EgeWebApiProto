@@ -15,9 +15,10 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WebApiTest4.Models;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 using WebApiTest4.Providers;
 using WebApiTest4.Results;
+using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
 {
@@ -27,9 +28,10 @@ namespace WebApiTest4.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-
-        public AccountController()
+        private readonly IUserService _userService;
+        public AccountController(IUserService service)
         {
+            _userService = service;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -340,8 +342,10 @@ namespace WebApiTest4.Controllers
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
             
+            
             if (!result.Succeeded)
             {
+                _userService.AddCurrentExam(user, typeof(EgeExam));
                 return GetErrorResult(result);
             }
             else

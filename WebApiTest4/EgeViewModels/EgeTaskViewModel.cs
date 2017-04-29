@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.EgeViewModels
 {
     public class EgeTaskViewModel
     {
-        public EgeTaskViewModel(EgeTask sourseTask)
+        public EgeTaskViewModel(ExamTask sourseTask)
         {
             id = sourseTask.Id;
             text = sourseTask.Text;

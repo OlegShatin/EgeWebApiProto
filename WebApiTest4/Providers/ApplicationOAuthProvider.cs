@@ -10,7 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using WebApiTest4.Models;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Providers
 {

@@ -8,7 +8,7 @@ namespace WebApiTest4.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.EgeTask",
+                "dbo.ExamTask",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -43,7 +43,7 @@ namespace WebApiTest4.Migrations
                         Train_Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.EgeTask", t => t.EgeTask_Id, cascadeDelete: true)
+                .ForeignKey("dbo.ExamTask", t => t.EgeTask_Id, cascadeDelete: true)
                 .ForeignKey("dbo.Train", t => t.Train_Id, cascadeDelete: true)
                 .Index(t => t.EgeTask_Id)
                 .Index(t => t.Train_Id);
@@ -83,14 +83,14 @@ namespace WebApiTest4.Migrations
             DropForeignKey("dbo.UserTaskAttempt", "Train_Id", "dbo.Train");
             DropForeignKey("dbo.Train", "User_Id", "dbo.User");
             DropForeignKey("dbo.Train", "Type_Id", "dbo.TrainType");
-            DropForeignKey("dbo.UserTaskAttempt", "EgeTask_Id", "dbo.EgeTask");
-            DropForeignKey("dbo.EgeTask", "Topic_Id", "dbo.TaskTopic");
+            DropForeignKey("dbo.UserTaskAttempt", "EgeTask_Id", "dbo.ExamTask");
+            DropForeignKey("dbo.ExamTask", "Topic_Id", "dbo.TaskTopic");
             DropIndex("dbo.Train", new[] { "User_Id" });
             DropIndex("dbo.Train", new[] { "Type_Id" });
             DropIndex("dbo.UserTaskAttempt", new[] { "Train_Id" });
             DropIndex("dbo.UserTaskAttempt", new[] { "EgeTask_Id" });
             DropIndex("dbo.TaskTopic", new[] { "Number" });
-            DropIndex("dbo.EgeTask", new[] { "Topic_Id" });
+            DropIndex("dbo.ExamTask", new[] { "Topic_Id" });
             DropColumn("dbo.User", "UsePoints");
             DropColumn("dbo.User", "Points");
             DropColumn("dbo.User", "CreatedAt");
@@ -98,7 +98,7 @@ namespace WebApiTest4.Migrations
             DropTable("dbo.Train");
             DropTable("dbo.UserTaskAttempt");
             DropTable("dbo.TaskTopic");
-            DropTable("dbo.EgeTask");
+            DropTable("dbo.ExamTask");
         }
     }
 }

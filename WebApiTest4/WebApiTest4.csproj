@@ -334,17 +334,61 @@
     <Compile Include="Migrations\201704240050170_extra-constraint-dropped.Designer.cs">
       <DependentUpon>201704240050170_extra-constraint-dropped.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704290112038_renamed-ege-to-exam-train.cs" />
+    <Compile Include="Migrations\201704290112038_renamed-ege-to-exam-train.Designer.cs">
+      <DependentUpon>201704290112038_renamed-ege-to-exam-train.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290143215_renamed-ege-to-exam-task.cs" />
+    <Compile Include="Migrations\201704290143215_renamed-ege-to-exam-task.Designer.cs">
+      <DependentUpon>201704290143215_renamed-ege-to-exam-task.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290145367_renamed-context.cs" />
+    <Compile Include="Migrations\201704290145367_renamed-context.Designer.cs">
+      <DependentUpon>201704290145367_renamed-context.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290224153_added-exam-type.cs" />
+    <Compile Include="Migrations\201704290224153_added-exam-type.Designer.cs">
+      <DependentUpon>201704290224153_added-exam-type.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290240007_added-exam-type-fk.cs" />
+    <Compile Include="Migrations\201704290240007_added-exam-type-fk.Designer.cs">
+      <DependentUpon>201704290240007_added-exam-type-fk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290242340_added-exam-type-fk-2.cs" />
+    <Compile Include="Migrations\201704290242340_added-exam-type-fk-2.Designer.cs">
+      <DependentUpon>201704290242340_added-exam-type-fk-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290243435_added-exam-type-fk-3.cs" />
+    <Compile Include="Migrations\201704290243435_added-exam-type-fk-3.Designer.cs">
+      <DependentUpon>201704290243435_added-exam-type-fk-3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290251275_added-exam-type-fk-4.cs" />
+    <Compile Include="Migrations\201704290251275_added-exam-type-fk-4.Designer.cs">
+      <DependentUpon>201704290251275_added-exam-type-fk-4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290253116_added-exam-type-fk-5.cs" />
+    <Compile Include="Migrations\201704290253116_added-exam-type-fk-5.Designer.cs">
+      <DependentUpon>201704290253116_added-exam-type-fk-5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290255399_added-exam-type-fk-6.cs" />
+    <Compile Include="Migrations\201704290255399_added-exam-type-fk-6.Designer.cs">
+      <DependentUpon>201704290255399_added-exam-type-fk-6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704290257580_added-exam-type-fk-7.cs" />
+    <Compile Include="Migrations\201704290257580_added-exam-type-fk-7.Designer.cs">
+      <DependentUpon>201704290257580_added-exam-type-fk-7.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\EgeModels\Badge.cs" />
-    <Compile Include="Models\EgeModels\EgeDbContext.cs" />
-    <Compile Include="Models\EgeModels\EgeTask.cs" />
-    <Compile Include="Models\EgeModels\TaskTopic.cs" />
-    <Compile Include="Models\EgeModels\Train.cs" />
-    <Compile Include="Models\EgeModels\TrainType.cs" />
-    <Compile Include="Models\EgeModels\User.cs" />
-    <Compile Include="Models\EgeModels\UserTaskAttempt.cs" />
+    <Compile Include="Models\ExamsModels\Badge.cs" />
+    <Compile Include="Models\ExamsModels\ExamAppDbContext.cs" />
+    <Compile Include="Models\ExamsModels\ExamTask.cs" />
+    <Compile Include="Models\ExamsModels\Exam.cs" />
+    <Compile Include="Models\ExamsModels\TaskTopic.cs" />
+    <Compile Include="Models\ExamsModels\Train.cs" />
+    <Compile Include="Models\ExamsModels\User.cs" />
+    <Compile Include="Models\ExamsModels\UserTaskAttempt.cs" />
     <Compile Include="Models\IdentityModules.cs" />
     <Compile Include="Parsing\Scanner.cs" />
     <Compile Include="Parsing\Topics.Designer.cs">
@@ -471,6 +515,39 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704240050170_extra-constraint-dropped.resx">
       <DependentUpon>201704240050170_extra-constraint-dropped.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290112038_renamed-ege-to-exam-train.resx">
+      <DependentUpon>201704290112038_renamed-ege-to-exam-train.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290143215_renamed-ege-to-exam-task.resx">
+      <DependentUpon>201704290143215_renamed-ege-to-exam-task.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290145367_renamed-context.resx">
+      <DependentUpon>201704290145367_renamed-context.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290224153_added-exam-type.resx">
+      <DependentUpon>201704290224153_added-exam-type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290240007_added-exam-type-fk.resx">
+      <DependentUpon>201704290240007_added-exam-type-fk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290242340_added-exam-type-fk-2.resx">
+      <DependentUpon>201704290242340_added-exam-type-fk-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290243435_added-exam-type-fk-3.resx">
+      <DependentUpon>201704290243435_added-exam-type-fk-3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290251275_added-exam-type-fk-4.resx">
+      <DependentUpon>201704290251275_added-exam-type-fk-4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290253116_added-exam-type-fk-5.resx">
+      <DependentUpon>201704290253116_added-exam-type-fk-5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290255399_added-exam-type-fk-6.resx">
+      <DependentUpon>201704290255399_added-exam-type-fk-6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704290257580_added-exam-type-fk-7.resx">
+      <DependentUpon>201704290257580_added-exam-type-fk-7.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Parsing\Topics.resx">
       <Generator>ResXFileCodeGenerator</Generator>

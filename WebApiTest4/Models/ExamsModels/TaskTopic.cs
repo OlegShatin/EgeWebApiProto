@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Linq;
-using System.Web;
 
-namespace WebApiTest4.Models.EgeModels
+namespace WebApiTest4.Models.ExamsModels
 {
     
-    [Table("TaskTopic")]
+    
     public class TaskTopic{
         
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,8 +20,10 @@ namespace WebApiTest4.Models.EgeModels
         [Required]
         [DefaultValue(false)]
         public bool IsShort { get; set; }
+        [Required]
+        public virtual Exam Exam { get; set; }
 
-        public virtual List<EgeTask> EgeTasks { get; set; }
+        public virtual List<ExamTask> ExamTasks { get; set; }
         
     }
 }

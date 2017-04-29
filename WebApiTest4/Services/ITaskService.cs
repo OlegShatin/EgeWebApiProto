@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WebApiTest4.EgeViewModels;
 using WebApiTest4.EgeViewModels.BindingModels;
-using WebApiTest4.Models.EgeModels;
 
 namespace WebApiTest4.Services
 {

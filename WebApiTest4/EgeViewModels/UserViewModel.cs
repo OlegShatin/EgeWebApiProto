@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.EgeViewModels
 {

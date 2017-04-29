@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Models
 {
@@ -29,7 +29,7 @@ namespace WebApiTest4.Models
 
     public class UserStoreIntPk : UserStore<User, RoleIntPk, int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
-        public UserStoreIntPk(EgeDbContext context)
+        public UserStoreIntPk(ExamAppDbContext context)
             : base(context)
         {
         }
@@ -37,7 +37,7 @@ namespace WebApiTest4.Models
 
     public class RoleStoreIntPk : RoleStore<RoleIntPk, int, UserRoleIntPk>
     {
-        public RoleStoreIntPk(EgeDbContext context)
+        public RoleStoreIntPk(ExamAppDbContext context)
             : base(context)
         {
         }
@@ -47,7 +47,7 @@ namespace WebApiTest4.Models
     //// You can add profile data for the user by adding more properties to your User class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     //public class User : IdentityUser<int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     //{
-    //    public async EgeTask<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
+    //    public async ExamTask<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
     //    {
     //        // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
     //        var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
@@ -56,16 +56,16 @@ namespace WebApiTest4.Models
     //    }
     //}
 
-    //public class EgeDbContext : IdentityDbContext<User, RoleIntPk, int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
+    //public class ExamAppDbContext : IdentityDbContext<User, RoleIntPk, int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     //{
-    //    public EgeDbContext()
+    //    public ExamAppDbContext()
     //        : base("DefaultConnection")
     //    {
     //    }
 
-    //    public static EgeDbContext Create()
+    //    public static ExamAppDbContext Create()
     //    {
-    //        return new EgeDbContext();
+    //        return new ExamAppDbContext();
     //    }
     //}
 

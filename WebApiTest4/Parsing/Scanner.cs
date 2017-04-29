@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 using System.Web;
 using AngleSharp;
 using AngleSharp.Extensions;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Parsing
 {
     public class Scanner
     {
         
-        public async Task AddNewTasks(EgeDbContext egeDbContext)
+        public async Task AddNewTasks(ExamAppDbContext examAppDbContext)
         {
-            using (egeDbContext)
+            using (examAppDbContext)
             {
 
 
@@ -45,19 +45,20 @@ namespace WebApiTest4.Parsing
                             int textStartPoint = result.IndexOf(textPrexfix) + textPrexfix.Length;
                             var newTopic = new TaskTopic()
                             {
+                                Exam = examAppDbContext.Exams.OfType<EgeExam>().FirstOrDefault(),
                                 Name = "DefaultName" + orderNum,
                                 Number = orderNum,
                                 PointsPerTask = 0
                             };
-                            if (egeDbContext.TaskTopics.All(x => x.Number != newTopic.Number))
+                            if (examAppDbContext.TaskTopics.All(x => x.Number != newTopic.Number))
                             {
-                                egeDbContext.TaskTopics.Add(newTopic);
+                                examAppDbContext.TaskTopics.Add(newTopic);
                             }
                             else
                             {
-                                newTopic = egeDbContext.TaskTopics.FirstOrDefault(x => x.Number == newTopic.Number);
+                                newTopic = examAppDbContext.TaskTopics.FirstOrDefault(x => x.Number == newTopic.Number);
                             }
-                            var newTask = new EgeTask()
+                            var newTask = new ExamTask()
                             {
 
                                 Topic = newTopic,
@@ -72,18 +73,18 @@ namespace WebApiTest4.Parsing
                                     .Next("td.answer")
                                     .FirstOrDefault()?.TextContent
                             };
-                            if (!egeDbContext.Tasks.Any(x => x.Number == newTask.Number))
+                            if (!examAppDbContext.Tasks.Any(x => x.Number == newTask.Number))
                             {
-                                egeDbContext.Tasks.Add(newTask);
+                                examAppDbContext.Tasks.Add(newTask);
                             }
                         }
                     }
                 }
-                egeDbContext.SaveChanges();
+                examAppDbContext.SaveChanges();
 
-                CreateEgeTasksTopics(egeDbContext);
+                CreateEgeTasksTopics(examAppDbContext);
 
-                egeDbContext.SaveChanges();
+                examAppDbContext.SaveChanges();
 
             }
 
@@ -91,13 +92,13 @@ namespace WebApiTest4.Parsing
 
         private const int countOfTopics = 27;
         private const int freeAnswerTasksStartsCount = 24;
-        private void CreateEgeTasksTopics(EgeDbContext egeDbContext)
+        private void CreateEgeTasksTopics(ExamAppDbContext examAppDbContext)
         {
             var rm = new ResourceManager("WebApiTest4.Parsing.Topics", Assembly.GetExecutingAssembly());
             for (int i = 1; i <= countOfTopics; i++)
             {
 
-                var topic = egeDbContext
+                var topic = examAppDbContext
                     .TaskTopics
                     .FirstOrDefault(x => x.Id == i);
                 if (topic != null)

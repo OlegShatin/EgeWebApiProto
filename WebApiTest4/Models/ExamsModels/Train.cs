@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
-namespace WebApiTest4.Models.EgeModels
+namespace WebApiTest4.Models.ExamsModels
 {
     //[Table("Train")]
     public class Train
@@ -22,16 +23,14 @@ namespace WebApiTest4.Models.EgeModels
 
         public DateTime? FinishTime { get; set; }
 
-        //[Required]
-        //public virtual TrainType Type { get; set; }
-
         [Required]
         public virtual User User { get; set; }
+        public virtual Exam Exam { get; set; }
 
         public virtual List<UserTaskAttempt> TaskAttempts { get; set; } = new List<UserTaskAttempt>();
     }
-    //[Table("EgeTrain")]
-    public class EgeTrain : Train
+    //[Table("ExamTrain")]
+    public class ExamTrain : Train
     {
         [DefaultValue(0)]
         public int? Points { get; set; }
@@ -40,6 +39,18 @@ namespace WebApiTest4.Models.EgeModels
     public class FreeTrain : Train
     {
         
+    }
+
+    public static class TrainExtensions
+    {
+        public static IEnumerable<Train> TrainsOfUsersCurrentExamType(this IEnumerable<Train> trains)
+        {
+            return null; //trains.Where(x => x.Exam.GetType() == x.User.CurrentExam.GetType());
+        }
+        public static IEnumerable<Train> OfExamType(this IEnumerable<Train> trains, Type examType)
+        {
+            return null; //trains.Where(x => x.Exam.GetType() == examType);
+        }
     }
 
 }

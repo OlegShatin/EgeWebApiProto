@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApiTest4.EgeViewModels;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Services.Impls
 {
     public class UserServiceImpl : IUserService
     {
-        private readonly EgeDbContext _context;
-        public UserServiceImpl(EgeDbContext context)
+        private readonly ExamAppDbContext _context;
+        public UserServiceImpl(ExamAppDbContext context)
         {
             _context = context;
         }
@@ -34,11 +34,11 @@ namespace WebApiTest4.Services.Impls
                         x => new
                         {
                             user = x,
-                            points = x.Trains.OfType<EgeTrain>()
+                            points = x.Trains.OfType<ExamTrain>()
                             .Sum(etr => etr.Points) ?? 0 
                                       + x.Trains.OfType<FreeTrain>()
                                          .SelectMany(ftr => ftr.TaskAttempts)
-                                         .GroupBy(ftta => ftta.EgeTask.Id, (z, y) => new { id = z, attempts = y })
+                                         .GroupBy(ftta => ftta.ExamTask.Id, (z, y) => new { id = z, attempts = y })
                                          .Select(g => g.attempts.Max(t => t.Points))
                                          .Sum()
 
@@ -52,6 +52,11 @@ namespace WebApiTest4.Services.Impls
                 );
             
 
+        }
+
+        public void AddCurrentExam(User user, Type type)
+        {
+            user.CurrentExam = _context.Exams.FirstOrDefault(x => x.GetType() == type);
         }
     }
 }

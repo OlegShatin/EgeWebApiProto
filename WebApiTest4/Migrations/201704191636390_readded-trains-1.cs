@@ -7,17 +7,17 @@ namespace WebApiTest4.Migrations
     {
         public override void Up()
         {
-            DropForeignKey("dbo.UserTaskAttempt", "EgeTrain_Id", "dbo.EgeTrains");
-            DropForeignKey("dbo.EgeTrains", "User_Id", "dbo.User");
+            DropForeignKey("dbo.UserTaskAttempt", "EgeTrain_Id", "dbo.ExamTrains");
+            DropForeignKey("dbo.ExamTrains", "User_Id", "dbo.User");
             DropForeignKey("dbo.UserTaskAttempt", "FreeTrain_Id", "dbo.FreeTrains");
             DropForeignKey("dbo.FreeTrains", "User_Id", "dbo.User");
-            DropIndex("dbo.EgeTrains", new[] { "User_Id" });
+            DropIndex("dbo.ExamTrains", new[] { "User_Id" });
             DropIndex("dbo.UserTaskAttempt", new[] { "EgeTrain_Id" });
             DropIndex("dbo.UserTaskAttempt", new[] { "FreeTrain_Id" });
             DropIndex("dbo.FreeTrains", new[] { "User_Id" });
             DropColumn("dbo.UserTaskAttempt", "EgeTrain_Id");
             DropColumn("dbo.UserTaskAttempt", "FreeTrain_Id");
-            DropTable("dbo.EgeTrains");
+            DropTable("dbo.ExamTrains");
             DropTable("dbo.FreeTrains");
         }
         
@@ -35,7 +35,7 @@ namespace WebApiTest4.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.EgeTrains",
+                "dbo.ExamTrains",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -51,11 +51,11 @@ namespace WebApiTest4.Migrations
             CreateIndex("dbo.FreeTrains", "User_Id");
             CreateIndex("dbo.UserTaskAttempt", "FreeTrain_Id");
             CreateIndex("dbo.UserTaskAttempt", "EgeTrain_Id");
-            CreateIndex("dbo.EgeTrains", "User_Id");
+            CreateIndex("dbo.ExamTrains", "User_Id");
             AddForeignKey("dbo.FreeTrains", "User_Id", "dbo.User", "Id");
             AddForeignKey("dbo.UserTaskAttempt", "FreeTrain_Id", "dbo.FreeTrains", "Id");
-            AddForeignKey("dbo.EgeTrains", "User_Id", "dbo.User", "Id");
-            AddForeignKey("dbo.UserTaskAttempt", "EgeTrain_Id", "dbo.EgeTrains", "Id");
+            AddForeignKey("dbo.ExamTrains", "User_Id", "dbo.User", "Id");
+            AddForeignKey("dbo.UserTaskAttempt", "EgeTrain_Id", "dbo.ExamTrains", "Id");
         }
     }
 }

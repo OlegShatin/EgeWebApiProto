@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using WebApiTest4.Models;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 using WebApiTest4.Services.Impls;
 
 namespace WebApiTest4
@@ -20,7 +20,7 @@ namespace WebApiTest4
 
     //    public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
     //    {
-    //        var manager = new ApplicationUserManager(new UserStore<User>(context.Get<EgeDbContext>()));
+    //        var manager = new ApplicationUserManager(new UserStore<User>(context.Get<ExamAppDbContext>()));
     //        // Настройка логики проверки имен пользователей
     //        manager.UserValidator = new UserValidator<User>(manager)
     //        {
@@ -55,7 +55,7 @@ namespace WebApiTest4
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
             IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStoreIntPk(context.Get<EgeDbContext>()));
+            var manager = new ApplicationUserManager(new UserStoreIntPk(context.Get<ExamAppDbContext>()));
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<User, int>(manager)
             {

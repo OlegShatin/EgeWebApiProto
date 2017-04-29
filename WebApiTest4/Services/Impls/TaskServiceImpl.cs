@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebApiTest4.EgeViewModels;
 using WebApiTest4.EgeViewModels.BindingModels;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 using WebGrease.Css.Extensions;
 
 namespace WebApiTest4.Services.Impls
@@ -11,11 +11,11 @@ namespace WebApiTest4.Services.Impls
     public class TaskServiceImpl : ITaskService
     {
 
-        public TaskServiceImpl(EgeDbContext context)
+        public TaskServiceImpl(ExamAppDbContext context)
         {
             _dbContext = context;
         }
-        private EgeDbContext _dbContext;
+        private ExamAppDbContext _dbContext;
 
         public EgeTaskViewModel GetTask(int id)
         {
@@ -32,23 +32,33 @@ namespace WebApiTest4.Services.Impls
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                var unfinishedTrain = user.Trains.OfType<EgeTrain>().FirstOrDefault(x => x.FinishTime == null);
+                var unfinishedTrain = user.Trains.OfType<ExamTrain>().TrainsOfUsersCurrentExamType().FirstOrDefault(x => x.FinishTime == null);
                 if (unfinishedTrain != null)
                 {
                     unfinishedTrain.FinishTime = DateTime.Now;
                 }
-                EgeTrain train = new EgeTrain();
+                ExamTrain train = new ExamTrain();
+                train.Exam = user.CurrentExam;
                 train.User = user;
                 train.StartTime = DateTime.Now;
                 Random rnd = new Random();
                 //get one task from each topic at fixed random examNumber position
-                var examNumber = rnd.Next(1, _dbContext.TaskTopics.First().EgeTasks.Count());
+                var examNumber = rnd.Next(
+                    1, 
+                    _dbContext
+                        .TaskTopics
+                        .First(x=> x.Exam.GetType() == user.CurrentExam.GetType())
+                        .ExamTasks
+                        .Count()
+                    );
+
                 train.TaskAttempts = _dbContext
                     .TaskTopics
+                    .Where(x => x.Exam.GetType() == user.CurrentExam.GetType())
                     .ToList()
                     .Select(x => new UserTaskAttempt()
                     {
-                        EgeTask = x.EgeTasks.ElementAt(examNumber)
+                        ExamTask = x.ExamTasks.ElementAt(examNumber)
                     })
                     .ToList();
                     
@@ -59,7 +69,7 @@ namespace WebApiTest4.Services.Impls
                 return train
                     .TaskAttempts
                     .ToList()
-                    .Select(x => new EgeTaskViewModel(x.EgeTask));
+                    .Select(x => new EgeTaskViewModel(x.ExamTask));
             }
             else
             {
@@ -114,9 +124,9 @@ namespace WebApiTest4.Services.Impls
             }
             else
             {
-                if (rawTrain.GetType() == typeof(EgeTrain))
+                if (rawTrain.GetType() == typeof(ExamTrain))
                 {
-                    return CheckEgeTrainAnswers((EgeTrain)rawTrain, answers);
+                    return CheckEgeTrainAnswers((ExamTrain)rawTrain, answers);
                 }
                 else
                 {
@@ -125,19 +135,19 @@ namespace WebApiTest4.Services.Impls
             }
         }
 
-        private dynamic CheckEgeTrainAnswers(EgeTrain train, IEnumerable<TaskAnswerBindingModel> answers)
+        private dynamic CheckEgeTrainAnswers(ExamTrain train, IEnumerable<TaskAnswerBindingModel> answers)
         {
             //make answers join train attempts
             var matchesAnswers = train.TaskAttempts
                 .Join(
                     answers,
-                    attempt => attempt.EgeTask.Id,
+                    attempt => attempt.ExamTask.Id,
                     ans => ans.id,
                     ((ta, ua) => new
                         {
                             answer = ua.answer,
                             attempt = ta,
-                            task = ta.EgeTask
+                            task = ta.ExamTask
                         })
                     );
             //get only short tasks
@@ -166,7 +176,7 @@ namespace WebApiTest4.Services.Impls
                 {
                     var attempt = new UserTaskAttempt()
                     {
-                        EgeTask = task,
+                        ExamTask = task,
                         Train = train,
                         UserAnswer = answer.answer,
                         Points = RateAnswer(task, answer.answer)
@@ -188,6 +198,7 @@ namespace WebApiTest4.Services.Impls
             if (trainType.ToLower().Equals("free"))
             {
                 train = new FreeTrain();
+                train.Exam = user.CurrentExam;
                 train.StartTime = DateTime.Now;
                 train.FinishTime = DateTime.Now;
             }
@@ -196,7 +207,7 @@ namespace WebApiTest4.Services.Impls
                 if (trainType.ToLower().Equals("ege"))
                 {
                     //searching unfinished ege trains
-                    train = user.Trains.OfType<EgeTrain>().FirstOrDefault(x => x.FinishTime == null);
+                    train = user.Trains.OfType<ExamTrain>().TrainsOfUsersCurrentExamType().FirstOrDefault(x => x.FinishTime == null);
                     if (train != null)
                     {
                         train.FinishTime = DateTime.Now;
@@ -214,13 +225,13 @@ namespace WebApiTest4.Services.Impls
             return train;
         }
 
-        private bool RatedAnswerIsCorrect(EgeTask task, UserTaskAttempt attempt)
+        private bool RatedAnswerIsCorrect(ExamTask task, UserTaskAttempt attempt)
         {
             return task.Topic.PointsPerTask == attempt.Points;
         }
         
 
-        private int RateAnswer(EgeTask task, string answer)
+        private int RateAnswer(ExamTask task, string answer)
         {
             if (
                 task.Answer.Trim()

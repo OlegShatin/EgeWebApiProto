@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiTest4.EgeViewModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Services
 {
@@ -11,5 +12,6 @@ namespace WebApiTest4.Services
     {
         UserViewModel GetUser(int id);
         IEnumerable<UserViewModel> GetRatingForUser(int userId);
+        void AddCurrentExam(User user, Type type);
     }
 }

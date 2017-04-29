@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApiTest4.EgeViewModels;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Services.Impls
 {
     public class TopicServiceImpl : ITopicService
     {
-        private readonly EgeDbContext _context;
-        public TopicServiceImpl(EgeDbContext context)
+        private readonly ExamAppDbContext _context;
+        public TopicServiceImpl(ExamAppDbContext context)
         {
             _context = context;
         }

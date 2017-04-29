@@ -2,25 +2,25 @@ using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WebApiTest4.Parsing;
 
-namespace WebApiTest4.Models.EgeModels
+namespace WebApiTest4.Models.ExamsModels
 {
-    public class EgeDbContext : IdentityDbContext<User, RoleIntPk, int,
+    public class ExamAppDbContext : IdentityDbContext<User, RoleIntPk, int,
         UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
-        //static EgeDbContext()
+        //static ExamAppDbContext()
         //{
-        //    //Database.SetInitializer<EgeDbContext>(new DropCreateDatabaseAlways<EgeDbContext>());
-        //    Database.SetInitializer<EgeDbContext>(new EgeDbIntializer());
+        //    //Database.SetInitializer<ExamAppDbContext>(new DropCreateDatabaseAlways<ExamAppDbContext>());
+        //    Database.SetInitializer<ExamAppDbContext>(new EgeDbIntializer());
         //}
-        public EgeDbContext()
+        public ExamAppDbContext()
             : base("DefaultConnection")
         {
             
         }
         
-        public static EgeDbContext Create()
+        public static ExamAppDbContext Create()
         {
-            var result = new EgeDbContext();
+            var result = new ExamAppDbContext();
             //Scanner scanner = new Scanner();
             //var synchTask = scanner.AddNewTasks(result);
             //synchTask.Wait();
@@ -41,20 +41,20 @@ namespace WebApiTest4.Models.EgeModels
 
         }
 
-        //public virtual DbSet<TrainType> TrainTypes { get; set; }
+        public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<TaskTopic> TaskTopics { get; set; }
-        public virtual DbSet<EgeTask> Tasks { get; set; }
+        public virtual DbSet<ExamTask> Tasks { get; set; }
         public virtual DbSet<Train> Trains { get; set; }
-        public virtual DbSet<EgeTrain> EgeTrains { get; set; }
+        public virtual DbSet<ExamTrain> ExamTrains { get; set; }
         public virtual DbSet<FreeTrain> FreeTrains { get; set; }
         public virtual DbSet<UserTaskAttempt> UserTaskAttempts { get; set; }
         public virtual DbSet<Badge> Badges { get; set; }
         
     }
 
-    class EgeDbIntializer : IDatabaseInitializer<EgeDbContext>
+    class EgeDbIntializer : IDatabaseInitializer<ExamAppDbContext>
     {
-        protected void Seed(EgeDbContext db)
+        protected void Seed(ExamAppDbContext db)
         {
             using (db)
             {
@@ -67,7 +67,7 @@ namespace WebApiTest4.Models.EgeModels
 
         }
 
-        public void InitializeDatabase(EgeDbContext context)
+        public void InitializeDatabase(ExamAppDbContext context)
         {
             throw new System.NotImplementedException();
         }

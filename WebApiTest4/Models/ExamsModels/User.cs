@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace WebApiTest4.Models.EgeModels
+namespace WebApiTest4.Models.ExamsModels
 {
     public class User : IdentityUser<int, UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
@@ -26,8 +25,9 @@ namespace WebApiTest4.Models.EgeModels
         public int Points { get; set; }
         [DefaultValue(0)]
         public int UsePoints { get; set; }
+        public Exam CurrentExam { get; set; }
 
-        
+
         public virtual List<Train> Trains{ get; set; }
 
         public virtual List<Badge> Badges { get; set; }

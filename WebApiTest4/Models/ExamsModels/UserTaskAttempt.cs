@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApiTest4.Models.EgeModels
+namespace WebApiTest4.Models.ExamsModels
 {
     [Table("UserTaskAttempt")]
     public class UserTaskAttempt
@@ -15,7 +15,7 @@ namespace WebApiTest4.Models.EgeModels
         [DefaultValue(0)]
         public int Points { get; set; }
         [Required]
-        public virtual EgeTask EgeTask { get; set; }
+        public virtual ExamTask ExamTask { get; set; }
         [Required]
         public virtual Train Train { get; set; }
     }

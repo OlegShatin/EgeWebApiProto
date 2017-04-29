@@ -10,7 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using WebApiTest4.Providers;
 using WebApiTest4.Models;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4
 {
@@ -24,7 +24,7 @@ namespace WebApiTest4
         public void ConfigureAuth(IAppBuilder app)
         {
             // Настройка контекста базы данных и диспетчера пользователей для использования одного экземпляра на запрос
-            app.CreatePerOwinContext(EgeDbContext.Create);
+            app.CreatePerOwinContext(ExamAppDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 
             // Включение использования файла cookie, в котором приложение может хранить информацию для пользователя, выполнившего вход,

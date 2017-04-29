@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ninject;
-using WebApiTest4.Models.EgeModels;
+using WebApiTest4.Models.ExamsModels;
 using WebApiTest4.Services;
 using WebApiTest4.Services.Impls;
 
@@ -28,7 +28,7 @@ namespace WebApiTest4.Util
         }
         private void AddBindings()
         {
-            var context = new EgeDbContext();
+            var context = new ExamAppDbContext();
             kernel.Bind<ITaskService>().To<TaskServiceImpl>().WithConstructorArgument("context", context);
             kernel.Bind<IUserService>().To<UserServiceImpl>().WithConstructorArgument("context", context);
             kernel.Bind<ITopicService>().To<TopicServiceImpl>().WithConstructorArgument("context", context);
