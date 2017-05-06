@@ -32,7 +32,7 @@ namespace WebApiTest4.Services.Impls
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                var unfinishedTrain = user.Trains.OfType<ExamTrain>().TrainsOfUsersCurrentExamType().FirstOrDefault(x => x.FinishTime == null);
+                var unfinishedTrain = user.Trains.OfType<ExamTrain>().TrainsOfUsersCurrentExamType()?.FirstOrDefault(x => x.FinishTime == null);
                 if (unfinishedTrain != null)
                 {
                     unfinishedTrain.FinishTime = DateTime.Now;
@@ -43,18 +43,23 @@ namespace WebApiTest4.Services.Impls
                 train.StartTime = DateTime.Now;
                 Random rnd = new Random();
                 //get one task from each topic at fixed random examNumber position
+                var lastIndexOfTasksList = _dbContext
+                    .TaskTopics
+                    .FirstOrDefault(x => x.Exam.Id == user.CurrentExam.Id)?
+                    .ExamTasks
+                    .Count()?? 0;
+                if (lastIndexOfTasksList == 0)
+                {
+                    return new List<EgeTaskViewModel>();
+                }
                 var examNumber = rnd.Next(
-                    1, 
-                    _dbContext
-                        .TaskTopics
-                        .First(x=> x.Exam.GetType() == user.CurrentExam.GetType())
-                        .ExamTasks
-                        .Count()
+                    0, 
+                    lastIndexOfTasksList - 1
                     );
 
                 train.TaskAttempts = _dbContext
                     .TaskTopics
-                    .Where(x => x.Exam.GetType() == user.CurrentExam.GetType())
+                    .Where(x => x.Exam.Id == user.CurrentExam.Id)
                     .ToList()
                     .Select(x => new UserTaskAttempt()
                     {

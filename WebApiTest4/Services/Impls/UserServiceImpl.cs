@@ -56,7 +56,11 @@ namespace WebApiTest4.Services.Impls
 
         public void AddCurrentExam(User user, Type type)
         {
-            user.CurrentExam = _context.Exams.FirstOrDefault(x => x.GetType() == type);
+            //to be sure users exist in the same context
+            var dbUser = _context.Users.FirstOrDefault(x => x.Id == user.Id);
+            var exam = _context.Exams.AsEnumerable().FirstOrDefault(x => x.GetType() == type);
+            dbUser.CurrentExam = _context.Exams.FirstOrDefault(x => x.Id == exam.Id);
+            _context.SaveChanges();
         }
     }
 }

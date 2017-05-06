@@ -337,27 +337,23 @@ namespace WebApiTest4.Controllers
                 Email = model.Email,
                 Avatar = model.Avatar,
                 CreatedAt = DateTime.Now
-                
             };
-
+            
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
             
             
             if (!result.Succeeded)
             {
-                _userService.AddCurrentExam(user, typeof(EgeExam));
+                
                 return GetErrorResult(result);
             }
             else
             {
                 await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "student"));
-                //var id = UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ExternalBearer).Result;
-                //id.AddClaim();
-
-                //var i = id.Claims;
+                
 
             }
-            
+            _userService.AddCurrentExam(user, typeof(EgeExam));
             var grantType = "password";
             return Ok();
             //return RedirectToRoute(

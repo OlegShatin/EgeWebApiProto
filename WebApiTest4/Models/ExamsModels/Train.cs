@@ -45,11 +45,11 @@ namespace WebApiTest4.Models.ExamsModels
     {
         public static IEnumerable<Train> TrainsOfUsersCurrentExamType(this IEnumerable<Train> trains)
         {
-            return null; //trains.Where(x => x.Exam.GetType() == x.User.CurrentExam.GetType());
+            return trains.ToList().Where(x => x.Exam.GetType() == x.User.CurrentExam.GetType());
         }
         public static IEnumerable<Train> OfExamType(this IEnumerable<Train> trains, Type examType)
         {
-            return null; //trains.Where(x => x.Exam.GetType() == examType);
+            return trains.ToList().Where(x => x.Exam.GetType() == examType);
         }
     }
 
