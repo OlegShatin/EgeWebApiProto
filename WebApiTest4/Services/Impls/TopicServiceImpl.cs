@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApiTest4.EgeViewModels;
+using WebApiTest4.ApiViewModels;
 using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Services.Impls
@@ -14,9 +14,9 @@ namespace WebApiTest4.Services.Impls
         {
             _context = context;
         }
-        public IEnumerable<EgeTopicViewModel> GetTopics()
+        public IEnumerable<ExamTopicViewModel> GetTopics()
         {
-            return _context.TaskTopics.OrderBy(x => x.Id).ToList().Select(x => new EgeTopicViewModel(x));
+            return _context.TaskTopics.OrderBy(x => x.Id).ToList().Select(x => new ExamTopicViewModel(x));
         }
     }
 }

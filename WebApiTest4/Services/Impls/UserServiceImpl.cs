@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApiTest4.EgeViewModels;
+using WebApiTest4.ApiViewModels;
 using WebApiTest4.Models.ExamsModels;
 
 namespace WebApiTest4.Services.Impls

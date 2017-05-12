@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebApiTest4.EgeViewModels;
+using WebApiTest4.ApiViewModels;
 
 namespace WebApiTest4.Services
 {
     public interface ITopicService
     {
-        IEnumerable<EgeTopicViewModel> GetTopics();
+        IEnumerable<ExamTopicViewModel> GetTopics();
     }
 }

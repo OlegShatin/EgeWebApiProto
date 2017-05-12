@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using WebApiTest4.Models.ExamsModels;
+﻿using WebApiTest4.Models.ExamsModels;
 
-namespace WebApiTest4.EgeViewModels
+namespace WebApiTest4.ApiViewModels
 {
-    public class EgeTaskViewModel
+    public class ExamTaskViewModel
     {
-        public EgeTaskViewModel(ExamTask sourseTask)
+        public ExamTaskViewModel(ExamTask sourseTask)
         {
             id = sourseTask.Id;
             text = sourseTask.Text;

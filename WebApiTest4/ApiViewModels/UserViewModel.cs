@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using WebApiTest4.Models.ExamsModels;
 
-namespace WebApiTest4.EgeViewModels
+namespace WebApiTest4.ApiViewModels
 {
     public class UserViewModel
     {

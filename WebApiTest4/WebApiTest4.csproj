@@ -209,6 +209,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiViewModels\AnswerViewModel.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -251,14 +252,35 @@
     <Compile Include="Controllers\ThemesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="EgeViewModels\BadgeViewModel.cs" />
-    <Compile Include="EgeViewModels\EgeTopicViewModel.cs" />
-    <Compile Include="EgeViewModels\EgeTaskViewModel.cs" />
-    <Compile Include="EgeViewModels\BindingModels\TaskAnswerViewModel.cs" />
-    <Compile Include="EgeViewModels\UserViewModel.cs" />
+    <Compile Include="ApiViewModels\BadgeViewModel.cs" />
+    <Compile Include="ApiViewModels\ExamTopicViewModel.cs" />
+    <Compile Include="ApiViewModels\ExamTaskViewModel.cs" />
+    <Compile Include="ApiViewModels\BindingModels\TaskAnswerBindingModel.cs" />
+    <Compile Include="ApiViewModels\UserViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705102344261_init.cs" />
+    <Compile Include="Migrations\201705102344261_init.Designer.cs">
+      <DependentUpon>201705102344261_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705102345402_attempts-divided.cs" />
+    <Compile Include="Migrations\201705102345402_attempts-divided.Designer.cs">
+      <DependentUpon>201705102345402_attempts-divided.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705102349503_attempts-divided-with-reviewer.cs" />
+    <Compile Include="Migrations\201705102349503_attempts-divided-with-reviewer.Designer.cs">
+      <DependentUpon>201705102349503_attempts-divided-with-reviewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705110157230_default-val-in-task-attempt.cs" />
+    <Compile Include="Migrations\201705110157230_default-val-in-task-attempt.Designer.cs">
+      <DependentUpon>201705110157230_default-val-in-task-attempt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705110220056_date-bug.cs" />
+    <Compile Include="Migrations\201705110220056_date-bug.Designer.cs">
+      <DependentUpon>201705110220056_date-bug.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ExamsModels\Badge.cs" />
@@ -340,6 +362,21 @@
     <None Include="Properties\PublishProfiles\ExamApp.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\201705102344261_init.resx">
+      <DependentUpon>201705102344261_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705102345402_attempts-divided.resx">
+      <DependentUpon>201705102345402_attempts-divided.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705102349503_attempts-divided-with-reviewer.resx">
+      <DependentUpon>201705102349503_attempts-divided-with-reviewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705110157230_default-val-in-task-attempt.resx">
+      <DependentUpon>201705110157230_default-val-in-task-attempt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705110220056_date-bug.resx">
+      <DependentUpon>201705110220056_date-bug.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Parsing\Topics.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Topics.Designer.cs</LastGenOutput>

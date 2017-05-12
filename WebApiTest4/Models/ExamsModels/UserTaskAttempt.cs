@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApiTest4.Models.ExamsModels
 {
-    [Table("UserTaskAttempt")]
+    
     public class UserTaskAttempt
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,4 +20,18 @@ namespace WebApiTest4.Models.ExamsModels
         [Required]
         public virtual Train Train { get; set; }
     }
+
+    public class UserSimpleTaskAttempt : UserTaskAttempt
+    {
+        
+    }
+
+    public class UserManualCheckingTaskAttempt : UserTaskAttempt
+    {
+        public DateTime? CheckTime { get; set; }
+        [DefaultValue(false)]
+        public bool IsChecked { get; set; }
+        public virtual User Reviewer { get; set; }
+    }
+
 }

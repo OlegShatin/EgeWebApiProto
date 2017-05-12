@@ -10,8 +10,8 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using WebApiTest4.EgeViewModels;
-using WebApiTest4.EgeViewModels.BindingModels;
+using WebApiTest4.ApiViewModels;
+using WebApiTest4.ApiViewModels.BindingModels;
 using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
@@ -30,17 +30,17 @@ namespace WebApiTest4.Controllers
         const int defaultLimit = 20;
         //GET: api/Tasks?
         [HttpGet]
-        public IEnumerable<EgeTaskViewModel> GetByTopic([FromUri]int? topic_id, [FromUri]int? offset, [FromUri]int? limit)
+        public IEnumerable<ExamTaskViewModel> GetByTopic([FromUri]int? topic_id, [FromUri]int? offset, [FromUri]int? limit)
         {
 
             return _taskService.GetSortedTasks(topic_id, offset ?? 0, limit ?? defaultLimit);
         }
         //GET: api/Tasks?
         [HttpGet]
-        public IEnumerable<EgeTaskViewModel> GetByType([FromUri]int? type, [FromUri]int? offset, [FromUri]int? limit)
+        public IEnumerable<ExamTaskViewModel> GetByType([FromUri]int? type, [FromUri]int? offset, [FromUri]int? limit)
         {
 
-            return new List<EgeTaskViewModel>();
+            return new List<ExamTaskViewModel>();
                 //_taskService.GetTasksByType(type, offset ?? 0, limit ?? defaultLimit);
         }
 
@@ -64,14 +64,14 @@ namespace WebApiTest4.Controllers
         }
         [HttpGet]
         [ActionName("Train")]
-        public IEnumerable<EgeTaskViewModel> GetTrain()
+        public IEnumerable<ExamTaskViewModel> GetTrain()
         {
            return _taskService.GenerateNewExamTrain(User
                 .Identity
                 .GetUserId<int>());
         }
         //// GET: api/Tasks/5
-        //public EgeTaskViewModel Get(int id)
+        //public ExamTaskViewModel Get(int id)
         //{
         //    return _taskService.GetTask(id);
         //}

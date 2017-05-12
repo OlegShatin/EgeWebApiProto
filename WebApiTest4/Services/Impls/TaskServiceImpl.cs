@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WebApiTest4.EgeViewModels;
-using WebApiTest4.EgeViewModels.BindingModels;
+using Org.BouncyCastle.Asn1.X509;
+using WebApiTest4.ApiViewModels;
+using WebApiTest4.ApiViewModels.BindingModels;
 using WebApiTest4.Models.ExamsModels;
 using WebGrease.Css.Extensions;
 
@@ -17,17 +18,17 @@ namespace WebApiTest4.Services.Impls
         }
         private ExamAppDbContext _dbContext;
 
-        public EgeTaskViewModel GetTask(int id)
+        public ExamTaskViewModel GetTask(int id)
         {
             return _dbContext
                 .Tasks
                 .Where(x => x.Id == id)
                 .ToList()
-                .Select(x => new EgeTaskViewModel(x))
+                .Select(x => new ExamTaskViewModel(x))
                 .FirstOrDefault();
         }
 
-        public IEnumerable<EgeTaskViewModel> GenerateNewExamTrain(int userId)
+        public IEnumerable<ExamTaskViewModel> GenerateNewExamTrain(int userId)
         {
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
@@ -50,21 +51,19 @@ namespace WebApiTest4.Services.Impls
                     .Count()?? 0;
                 if (lastIndexOfTasksList == 0)
                 {
-                    return new List<EgeTaskViewModel>();
+                    return new List<ExamTaskViewModel>();
                 }
                 var examNumber = rnd.Next(
                     0, 
                     lastIndexOfTasksList - 1
                     );
-
+                //todo:remove after test
+                examNumber = 10;
                 train.TaskAttempts = _dbContext
                     .TaskTopics
                     .Where(x => x.Exam.Id == user.CurrentExam.Id)
                     .ToList()
-                    .Select(x => new UserTaskAttempt()
-                    {
-                        ExamTask = x.ExamTasks.ElementAt(examNumber)
-                    })
+                    .Select(x => GenerateNewEmptyAttempt(x.ExamTasks.ElementAt(examNumber)))
                     .ToList();
                     
                 //save to db
@@ -74,7 +73,7 @@ namespace WebApiTest4.Services.Impls
                 return train
                     .TaskAttempts
                     .ToList()
-                    .Select(x => new EgeTaskViewModel(x.ExamTask));
+                    .Select(x => new ExamTaskViewModel(x.ExamTask));
             }
             else
             {
@@ -82,7 +81,7 @@ namespace WebApiTest4.Services.Impls
             }
         }
 
-        public IEnumerable<EgeTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit)
+        public IEnumerable<ExamTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit)
         {
             //var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
 
@@ -93,57 +92,59 @@ namespace WebApiTest4.Services.Impls
                 .Skip(offset)
                 .Take(limit)
                 .ToList()
-                .Select(x => new EgeTaskViewModel(x));
+                .Select(x => new ExamTaskViewModel(x));
 
             
         }
 
-        public dynamic CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId)
+        public IEnumerable<AnswerViewModel> CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId)
         {
-                       
             
-            var correctIds = new List<int>();
+            var empty = new List<AnswerViewModel>();
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
                 var train = GetTrainByType(trainType, user);
-                if (train == null) return new List<int>();
-                
+                if (train == null) return empty;
                 train.User = user;
-                _dbContext.Trains.Add(train);
+                var trainWithAttempts = AddAttemptsToTrain(train, answers);
+                var result = CheckAnswers(trainWithAttempts);
+                //todo: fixme
+                //_dbContext.Trains.Add(train);
+                _dbContext.SaveChanges();
+                return result;
 
-                return CheckAnswersByTrain(train, answers);
-                
             }
-            
-            return correctIds;
-            
+            return empty;
         }
 
-        private IEnumerable<int> CheckAnswersByTrain(Train rawTrain, IEnumerable<TaskAnswerBindingModel> answers)
+        
+
+        private Train AddAttemptsToTrain(Train rawTrain, IEnumerable<TaskAnswerBindingModel> answers)
         {
             if (rawTrain.GetType() == typeof(FreeTrain))
             {
-                return CheckFreeTrainAnswers((FreeTrain) rawTrain, answers);
+                return AddAttemptsToFreeTrain((FreeTrain) rawTrain, answers);
 
             }
             else
             {
                 if (rawTrain.GetType() == typeof(ExamTrain))
                 {
-                    return CheckEgeTrainAnswers((ExamTrain)rawTrain, answers);
+                    return AddAttemptsToExamTrain((ExamTrain)rawTrain, answers);
                 }
                 else
                 {
-                    return new List<int>();
+                    return null;
                 }
             }
         }
 
-        private dynamic CheckEgeTrainAnswers(ExamTrain train, IEnumerable<TaskAnswerBindingModel> answers)
+        private Train AddAttemptsToExamTrain(ExamTrain train, IEnumerable<TaskAnswerBindingModel> answers)
         {
-            //make answers join train attempts
-            var matchesAnswers = train.TaskAttempts
+            //get pairs attempt - answer and add answer value to attempt
+            //attempts in exam train defined already 
+            train.TaskAttempts
                 .Join(
                     answers,
                     attempt => attempt.ExamTask.Id,
@@ -151,53 +152,53 @@ namespace WebApiTest4.Services.Impls
                     ((ta, ua) => new
                         {
                             answer = ua.answer,
-                            attempt = ta,
-                            task = ta.ExamTask
+                            attempt = ta
                         })
-                    );
-            //get only short tasks
-            //todo: add teacher checking system for long type of task
-            var shortAnswers = matchesAnswers
-                .Where(x => x.task.Topic.IsShort);
-            //rate answers
-            shortAnswers
+                )
                 .ForEach(x => x.attempt.UserAnswer = x.answer);
-            shortAnswers
-                .ForEach(x =>x.attempt.Points = RateAnswer(x.task, x.attempt.UserAnswer));
-            //get right answers
-            //todo: debug it
-            _dbContext.SaveChanges();
-            return shortAnswers
-                .Select(x => new {task_id = x.task.Id, right_answer = x.task.Answer });
+            return train;
         }
 
-        private IEnumerable<int> CheckFreeTrainAnswers(FreeTrain train, IEnumerable<TaskAnswerBindingModel> answers)
+        private Train AddAttemptsToFreeTrain(FreeTrain train, IEnumerable<TaskAnswerBindingModel> answers)
         {
-            var correctIds = new List<int>();
-            foreach (var answer in answers)
-            {
-                var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == answer.id);
-                if (task.Topic.IsShort)
+            //add new attempts in free train for each answer
+            answers.ForEach(x =>
                 {
-                    var attempt = new UserTaskAttempt()
-                    {
-                        ExamTask = task,
-                        Train = train,
-                        UserAnswer = answer.answer,
-                        Points = RateAnswer(task, answer.answer)
-                    };
+                    var attempt = GenerateNewEmptyAttemptByTaskId(x.id);
+                    attempt.UserAnswer = x.answer;
                     train.TaskAttempts.Add(attempt);
-                    if (RatedAnswerIsCorrect(task, attempt))
-                    {
-                        correctIds.Add(task.Id);
-                    }
                 }
-            }
-            return correctIds;
-
+            );
+            return train;
         }
 
-        private static Train GetTrainByType(string trainType, User user)
+        //factory method to generate new attempts of difereant types
+        private UserTaskAttempt GenerateNewEmptyAttemptByTaskId(int taskId)
+        {
+            var task = _dbContext.Tasks.FirstOrDefault(x => x.Id == taskId);
+            if (task == null) return null;
+            return GenerateNewEmptyAttempt(task);
+        }
+
+        private UserTaskAttempt GenerateNewEmptyAttempt(ExamTask task)
+        {
+            UserTaskAttempt result = null;
+            if (task.Topic.IsShort)
+            {
+                result = new UserSimpleTaskAttempt() {ExamTask = task};
+            }
+            else
+            {
+                result = new UserManualCheckingTaskAttempt() {ExamTask = task};
+            }
+            if (result != null)
+            {
+                _dbContext.UserTaskAttempts.Add(result);
+            }
+            return result;
+        }
+
+        private Train GetTrainByType(string trainType, User user)
         {
             Train train;
             if (trainType.ToLower().Equals("free"))
@@ -206,10 +207,12 @@ namespace WebApiTest4.Services.Impls
                 train.Exam = user.CurrentExam;
                 train.StartTime = DateTime.Now;
                 train.FinishTime = DateTime.Now;
+
+                _dbContext.Trains.Add(train);
             }
             else
             {
-                if (trainType.ToLower().Equals("ege"))
+                if (trainType.ToLower().Equals("exam"))
                 {
                     //searching unfinished ege trains
                     train = user.Trains.OfType<ExamTrain>().TrainsOfUsersCurrentExamType().FirstOrDefault(x => x.FinishTime == null);
@@ -230,21 +233,32 @@ namespace WebApiTest4.Services.Impls
             return train;
         }
 
-        private bool RatedAnswerIsCorrect(ExamTask task, UserTaskAttempt attempt)
+        private IEnumerable<AnswerViewModel> CheckAnswers(Train trainWithAttempts)
         {
-            return task.Topic.PointsPerTask == attempt.Points;
+            //rate each attempt
+            trainWithAttempts.TaskAttempts.OfType<UserSimpleTaskAttempt>().ForEach(x => x.Points = AutoRateAnswer(x));
+            //rate manually
+            trainWithAttempts.TaskAttempts.OfType<UserManualCheckingTaskAttempt>().ForEach(x => CheckManually(x));
+            //convert to answerViewModel
+            return trainWithAttempts.TaskAttempts.ToList().Select(x => new AnswerViewModel(x.ExamTask, x.Points));
         }
-        
 
-        private int RateAnswer(ExamTask task, string answer)
+        private void CheckManually(UserManualCheckingTaskAttempt userManualCheckingTaskAttempt)
         {
-            if (
-                task.Answer.Trim()
+            userManualCheckingTaskAttempt.Points = 0;
+            userManualCheckingTaskAttempt.IsChecked = false;
+            //todo: implement manual check system
+        }
+
+        private int AutoRateAnswer(UserTaskAttempt attempt)
+        {
+            if (attempt.UserAnswer != null 
+                && attempt.UserAnswer.Trim()
                     .Replace(" ", "")
                     .ToLowerInvariant()
-                    .Equals(answer.Trim().Replace(" ", "").ToLowerInvariant()))
+                    .Equals(attempt.ExamTask.Answer.Trim().Replace(" ", "").ToLowerInvariant()))
             {
-                return task.Topic.PointsPerTask;
+                return attempt.ExamTask.Topic.PointsPerTask;
             }
             else
             {
@@ -252,6 +266,12 @@ namespace WebApiTest4.Services.Impls
             }
         }
 
-        
+        [Obsolete("Not used anymore", true)]
+        private bool RatedAnswerIsCorrect(ExamTask task, UserTaskAttempt attempt)
+        {
+            return task.Topic.PointsPerTask == attempt.Points;
+        }
+
+
     }
 }

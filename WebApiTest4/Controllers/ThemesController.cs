@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WebApiTest4.EgeViewModels;
+using WebApiTest4.ApiViewModels;
 using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
@@ -18,7 +18,7 @@ namespace WebApiTest4.Controllers
         {
             _topicService = topicService;
         }
-        public IEnumerable<EgeTopicViewModel> Get()
+        public IEnumerable<ExamTopicViewModel> Get()
         {
             return _topicService.GetTopics();
         }

@@ -31,5 +31,7 @@ namespace WebApiTest4.Models.ExamsModels
         public virtual List<Train> Trains{ get; set; }
 
         public virtual List<Badge> Badges { get; set; }
+
+        public virtual IEnumerable<UserManualCheckingTaskAttempt> CheckedAttempts { get; set; }
     }
 }

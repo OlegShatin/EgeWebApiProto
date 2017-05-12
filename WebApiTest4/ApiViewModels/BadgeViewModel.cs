@@ -1,6 +1,6 @@
 ﻿using WebApiTest4.Models.ExamsModels;
 
-namespace WebApiTest4.EgeViewModels
+namespace WebApiTest4.ApiViewModels
 {
     public class BadgeViewModel
     {

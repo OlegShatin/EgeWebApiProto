@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
-using WebApiTest4.EgeViewModels;
+using WebApiTest4.ApiViewModels;
 using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers

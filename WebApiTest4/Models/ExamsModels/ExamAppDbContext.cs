@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
 using WebApiTest4.Parsing;
 
@@ -21,6 +22,17 @@ namespace WebApiTest4.Models.ExamsModels
         public static ExamAppDbContext Create()
         {
             var result = new ExamAppDbContext();
+            //check there is egeExam and ogeExam in db 
+            if (result.Exams.OfType<EgeExam>().Any())
+            {
+                result.Exams.Add(new EgeExam());
+                result.SaveChanges();
+            }
+            if (result.Exams.OfType<OgeExam>().Any())
+            {
+                result.Exams.Add(new OgeExam());
+                result.SaveChanges();
+            }
             //Scanner scanner = new Scanner();
             //var synchTask = scanner.AddNewTasks(result);
             //synchTask.Wait();
