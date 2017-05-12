@@ -250,6 +250,7 @@
     <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\ThemesController.cs" />
+    <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="ApiViewModels\BadgeViewModel.cs" />

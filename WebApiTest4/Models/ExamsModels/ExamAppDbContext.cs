@@ -1,6 +1,7 @@
 using System.Data.Entity;
 using System.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WebApiTest4.Migrations;
 using WebApiTest4.Parsing;
 
 namespace WebApiTest4.Models.ExamsModels
@@ -8,11 +9,11 @@ namespace WebApiTest4.Models.ExamsModels
     public class ExamAppDbContext : IdentityDbContext<User, RoleIntPk, int,
         UserLoginIntPk, UserRoleIntPk, UserClaimIntPk>
     {
-        //static ExamAppDbContext()
-        //{
-        //    //Database.SetInitializer<ExamAppDbContext>(new DropCreateDatabaseAlways<ExamAppDbContext>());
-        //    Database.SetInitializer<ExamAppDbContext>(new EgeDbIntializer());
-        //}
+        static ExamAppDbContext()
+        {
+            //Database.SetInitializer<ExamAppDbContext>(new DropCreateDatabaseAlways<ExamAppDbContext>());
+            Database.SetInitializer<ExamAppDbContext>(new MigrateDatabaseToLatestVersion<ExamAppDbContext,Configuration>());
+        }
         public ExamAppDbContext()
             : base("DefaultConnection")
         {
