@@ -57,8 +57,6 @@ namespace WebApiTest4.Services.Impls
                     0, 
                     lastIndexOfTasksList - 1
                     );
-                //todo:remove after test
-                examNumber = 10;
                 train.TaskAttempts = _dbContext
                     .TaskTopics
                     .Where(x => x.Exam.Id == user.CurrentExam.Id)
@@ -109,8 +107,6 @@ namespace WebApiTest4.Services.Impls
                 train.User = user;
                 var trainWithAttempts = AddAttemptsToTrain(train, answers);
                 var result = CheckAnswers(trainWithAttempts);
-                //todo: fixme
-                //_dbContext.Trains.Add(train);
                 _dbContext.SaveChanges();
                 return result;
 
