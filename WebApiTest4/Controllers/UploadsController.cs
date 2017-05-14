@@ -13,28 +13,40 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Profile;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace WebApiTest4.Controllers
 {
-    [Authorize]
     public class UploadsController : ApiController
     {
-        private static XmlDocument _uploadConfig = new XmlDocument();
-
+        private static XDocument _uploadConfig;
+        private static readonly string _xmlPath = System.IO.Path.GetDirectoryName(
+                System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase) + "\\UploadsConfig.xml";
         static UploadsController()
         {
-            //todo: fixme
-            _uploadConfig.Load("~/Util/UploadsConfig.xml");
+            _uploadConfig = XDocument.Load(_xmlPath, LoadOptions.SetBaseUri);
         }
         public int LastId
         {
-            get { return Int32.Parse(_uploadConfig.DocumentElement.SelectSingleNode("uploadLastId").Value); }
-            private set { _uploadConfig.DocumentElement.SelectSingleNode("uploadLastId").Value = value.ToString(); }
+            get
+            { 
+                //return Int32.Parse(_uploadConfig.DocumentElement.SelectSingleNode("uploadLastId").Value);
+                return Convert.ToInt32(_uploadConfig.Root.Descendants("uploadLastId").FirstOrDefault().Value);
+            }
+            private set
+            { //_uploadConfig.DocumentElement.SelectSingleNode("uploadLastId").Value = value.ToString(); _uploadConfig.sa
+                _uploadConfig.Root.Descendants("uploadLastId").FirstOrDefault().Value = value.ToString();
+                _uploadConfig.Save(new Uri(_uploadConfig.BaseUri).LocalPath);
+            }
         }
 
         public string UploadsStoragePath
         {
-            get { return _uploadConfig.DocumentElement.SelectSingleNode("uploadsStoragePath").Value; }
+            get
+            {
+                return _uploadConfig.Root.Descendants("uploadsStoragePath").FirstOrDefault().Value;
+                //return _uploadConfig.DocumentElement.SelectSingleNode("uploadsStoragePath").Value; 
+            }
         }
 
         // GET: api/Uploads/5
@@ -51,7 +63,7 @@ namespace WebApiTest4.Controllers
                 MemoryStream responseStream = new MemoryStream();
                 Stream fileStream = File.Open(path, FileMode.Open);
                 bool fullContent = true;
-                if (this.Request.Headers.Range != null)
+                /*if (this.Request.Headers.Range != null)
                 {
                     fullContent = false;
 
@@ -111,17 +123,16 @@ namespace WebApiTest4.Controllers
                 else
                 {
                     fileStream.CopyTo(responseStream);
-                }
+                }*/
+                fileStream.CopyTo(responseStream);
                 fileStream.Close();
                 responseStream.Position = 0;
-                //HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-                //response.Content = new StreamContent(responseStream);
-                //var startIndex = id.LastIndexOf(".", StringComparison.Ordinal);
-                //var extension = id.Substring(startIndex);
-                //response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/" + extension);
+                var startIndex = id.LastIndexOf(".") + 1;
                 HttpResponseMessage response = new HttpResponseMessage();
-                response.StatusCode = fullContent ? HttpStatusCode.OK : HttpStatusCode.PartialContent;
+                var extension = id.Substring(startIndex);
                 response.Content = new StreamContent(responseStream);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/" + extension);
+                response.StatusCode = fullContent ? HttpStatusCode.OK : HttpStatusCode.PartialContent;
 
                 return response;
             }
