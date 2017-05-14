@@ -28,28 +28,30 @@ namespace WebApiTest4.Services.Impls
         private  IEnumerable<UserViewModel> GetRatedUserViewModels()
         {
             
-            return
-                _context.Users
+            
+               return _context.Users
                     .Select(
                         x => new
                         {
                             user = x,
-                            points = x.Trains.OfType<ExamTrain>()
+                            points = x.Trains.Any()? (x.Trains.OfType<ExamTrain>()
                             .Sum(etr => etr.Points) ?? 0 
-                                      + x.Trains.OfType<FreeTrain>()
-                                         .SelectMany(ftr => ftr.TaskAttempts)
-                                         .GroupBy(ftta => ftta.ExamTask.Id, (z, y) => new { id = z, attempts = y })
-                                         .Select(g => g.attempts.Max(t => t.Points))
-                                         .Sum()
+                                      + (x.Trains.OfType<FreeTrain>().Any() ? 
+                                            x.Trains.OfType<FreeTrain>()
+                                             .SelectMany(ftr => ftr.TaskAttempts)
+                                             .GroupBy(ftta => ftta.ExamTask.Id, (z, y) => new { id = z, attempts = y })
+                                             .Select(g => g.attempts.Max(t => t.Points))
+                                             .Sum() : 0
+                                         )
+                            ) : 0
 
                         }
                     )
-                .Where(res => res.points != null)
-                .OrderByDescending(res => res.points)
-                .ToList()
-                .Select(
-                    (res, i) => new UserViewModel(res.user, (i + 1), res.points)
-                );
+                    .OrderByDescending(res => res.points)
+                    .ToList()
+                    .Select(
+                        (res, i) => new UserViewModel(res.user, (i + 1), res.points)
+                    );
             
 
         }

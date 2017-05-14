@@ -17,13 +17,13 @@ namespace WebApiTest4.ApiViewModels
             badges = sourceUser.Badges.Select(x => new BadgeViewModel(x)).ToList();
         }
 
-        public int? id { get; private set; }
+        public int id { get; private set; }
         public string name { get; private set; }
         public string avatar { get; private set; }
 
-        public int? points { get; private set; }
-        public int? rating_place { get; private set; }
-        public int? use_point { get; private set; }
+        public int points { get; private set; }
+        public int rating_place { get; private set; }
+        public int use_point { get; private set; }
         public List<BadgeViewModel> badges { get; set; }
     }
 }
