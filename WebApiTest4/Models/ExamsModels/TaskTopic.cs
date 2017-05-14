@@ -20,6 +20,9 @@ namespace WebApiTest4.Models.ExamsModels
         [Required]
         [DefaultValue(false)]
         public bool IsShort { get; set; }
+        [DefaultValue("")]
+        public string Code { get; set; }
+
         [Required]
         public virtual Exam Exam { get; set; }
 
