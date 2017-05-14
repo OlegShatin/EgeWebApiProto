@@ -14,5 +14,6 @@ namespace WebApiTest4.Services
         IEnumerable<ExamTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit);
         IEnumerable<AnswerViewModel> CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId);
         IEnumerable<ExamTaskViewModel> GenerateNewExamTrain(int userId);
+        IEnumerable<ExamTaskViewModel> GetTasksByType(int type, int offset, int limit);
     }
 }

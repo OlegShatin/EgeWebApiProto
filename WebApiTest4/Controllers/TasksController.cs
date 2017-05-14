@@ -40,8 +40,7 @@ namespace WebApiTest4.Controllers
         public IEnumerable<ExamTaskViewModel> GetByType([FromUri]int? type, [FromUri]int? offset, [FromUri]int? limit)
         {
 
-            return new List<ExamTaskViewModel>();
-                //_taskService.GetTasksByType(type, offset ?? 0, limit ?? defaultLimit);
+            return _taskService.GetTasksByType(type ?? 0, offset ?? 0, limit ?? defaultLimit);
         }
 
         

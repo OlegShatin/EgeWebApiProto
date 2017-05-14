@@ -268,6 +268,17 @@ namespace WebApiTest4.Services.Impls
             return task.Topic.PointsPerTask == attempt.Points;
         }
 
-
+        public IEnumerable<ExamTaskViewModel> GetTasksByType(int type, int offset, int limit)
+        {
+            bool isShortType = type == 0;
+            return _dbContext
+               .Tasks
+               .Where(x => x.Topic.IsShort == isShortType)
+               .OrderBy(x => x.Id)
+               .Skip(offset)
+               .Take(limit)
+               .ToList()
+               .Select(x => new ExamTaskViewModel(x));
+        }
     }
 }
