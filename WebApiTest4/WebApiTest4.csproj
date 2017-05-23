@@ -285,6 +285,10 @@
     <Compile Include="Migrations\201705142210155_topiccodes.Designer.cs">
       <DependentUpon>201705142210155_topiccodes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705232045042_attempt-to-save-links-list.cs" />
+    <Compile Include="Migrations\201705232045042_attempt-to-save-links-list.Designer.cs">
+      <DependentUpon>201705232045042_attempt-to-save-links-list.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -346,6 +350,9 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <EmbeddedResource Include="Migrations\201705142210155_topiccodes.resx">
       <DependentUpon>201705142210155_topiccodes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705232045042_attempt-to-save-links-list.resx">
+      <DependentUpon>201705232045042_attempt-to-save-links-list.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UploadsConfig.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

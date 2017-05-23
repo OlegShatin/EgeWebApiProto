@@ -140,6 +140,7 @@ namespace WebApiTest4.Services.Impls
         {
             //get pairs attempt - answer and add answer value to attempt
             //attempts in exam train defined already 
+            
             train.TaskAttempts
                 .Join(
                     answers,
@@ -147,11 +148,18 @@ namespace WebApiTest4.Services.Impls
                     ans => ans.id,
                     ((ta, ua) => new
                         {
-                            answer = ua.answer,
+                            bindingModel = ua,
                             attempt = ta
                         })
                 )
-                .ForEach(x => x.attempt.UserAnswer = x.answer);
+                .ForEach(
+                    x =>
+                    {
+                        var attemptFromTrain = x.attempt;
+                        attemptFromTrain.UserAnswer = x.bindingModel.answer;
+                        attemptFromTrain = addExtraInfoForType(attemptFromTrain, x.bindingModel);
+                    }
+                );
             return train;
         }
 
@@ -162,10 +170,27 @@ namespace WebApiTest4.Services.Impls
                 {
                     var attempt = GenerateNewEmptyAttemptByTaskId(x.id);
                     attempt.UserAnswer = x.answer;
+                    attempt = addExtraInfoForType(attempt, x);
                     train.TaskAttempts.Add(attempt);
                 }
             );
             return train;
+        }
+
+        private UserTaskAttempt addExtraInfoForType(UserTaskAttempt attempt, TaskAnswerBindingModel model)
+        {
+            //add additional params if attempt checking manually
+            if (attempt is UserManualCheckingTaskAttempt)
+            {
+                UserManualCheckingTaskAttempt attemptOfManualCheckingTask = (UserManualCheckingTaskAttempt)attempt;
+                attemptOfManualCheckingTask.Comment = model.comment;
+                attemptOfManualCheckingTask.ImagesLinks = model.images.ToList();
+                return attemptOfManualCheckingTask;
+            }
+            else
+            {
+                return attempt;
+            }
         }
 
         //factory method to generate new attempts of difereant types
