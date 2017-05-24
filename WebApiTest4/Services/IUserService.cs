@@ -13,5 +13,6 @@ namespace WebApiTest4.Services
         UserViewModel GetUser(int id);
         IEnumerable<UserViewModel> GetRatingForUser(int userId);
         void AddCurrentExam(User user, Type type);
+        User GetUserById(int id);
     }
 }

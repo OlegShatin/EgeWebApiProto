@@ -61,6 +61,32 @@ namespace WebApiTest4.Models
         //public string ConfirmPassword { get; set; }
     }
 
+    public class EditingBindingModel
+    {
+        
+        [Display(Name = "ФИО")]
+        public string Name { get; set; }
+        
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+        
+        [Display(Name = "Адрес электронной почты")]
+        public string Email { get; set; }
+
+        [Display(Name = "Аватар")]
+        public string Avatar { get; set; }
+
+        [Display(Name = "Школа")]
+        public int? school_id { get; set; }
+
+        [Display(Name = "Преподаватель")]
+        public int? teacher_id { get; set; }
+
+        [Display(Name = "Тип экзамена")]
+        public int? exam_type { get; set; }
+        
+    }
+
     public class RegisterExternalBindingModel
     {
         [Required]

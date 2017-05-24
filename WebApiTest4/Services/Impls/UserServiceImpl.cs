@@ -64,5 +64,10 @@ namespace WebApiTest4.Services.Impls
             dbUser.CurrentExam = _context.Exams.FirstOrDefault(x => x.Id == exam.Id);
             _context.SaveChanges();
         }
+
+        public User GetUserById(int id)
+        {
+            return _context.Users.FirstOrDefault(x => x.Id == id);
+        }
     }
 }

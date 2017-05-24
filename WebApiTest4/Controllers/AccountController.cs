@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -29,9 +30,12 @@ namespace WebApiTest4.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private readonly IUserService _userService;
-        public AccountController(IUserService service)
+        private readonly ISchoolService _schoolService;
+
+        public AccountController(IUserService service, ISchoolService schoolService)
         {
             _userService = service;
+            _schoolService = schoolService;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -366,6 +370,49 @@ namespace WebApiTest4.Controllers
             //            new KeyValuePair<string, object>("password", model.Password),
             //        }));
         }
+        // POST api/Account/Edit
+        [Authorize]
+        [HttpPost]
+        [Route("Edit")]
+        public async Task<IHttpActionResult> Edit([FromBody]EditingBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = UserManager.FindById(User.Identity.GetUserId<int>());
+            user.Name = model.Name ?? user.Name;
+            user.Avatar = model.Avatar ?? user.Avatar;
+            user.Name = model.Name ?? user.Name;
+            user.UserName = model.UserName ?? user.UserName;
+            user.Email = model.Email ?? user.Email;
+            if (model.school_id != null)
+            {
+                user.School = _schoolService.GetSchoolById(model.school_id.Value) ?? user.School;
+            }
+            if (model.teacher_id!= null)
+            {
+                //check requested user is teacher
+                User teacher = UserManager.FindById(model.teacher_id.Value);
+                user.Teacher = teacher != null ? UserManager.IsInRole(teacher.Id, "teacher") ? teacher : user.Teacher : user.Teacher;
+            }
+
+
+            IdentityResult result = await UserManager.UpdateAsync(user);
+            if (model.exam_type != null && (model.exam_type == 1 || model.exam_type == 0))
+            {
+                _userService.AddCurrentExam(user, model.exam_type == 0 ? typeof(EgeExam) : typeof(OgeExam));
+            }
+
+            if (!result.Succeeded)
+            {
+
+                return GetErrorResult(result);
+            }
+            return Ok();
+
+        }
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
@@ -572,4 +619,5 @@ namespace WebApiTest4.Controllers
 
         #endregion
     }
+    
 }

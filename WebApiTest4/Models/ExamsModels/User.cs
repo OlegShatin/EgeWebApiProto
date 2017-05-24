@@ -25,8 +25,14 @@ namespace WebApiTest4.Models.ExamsModels
         public int Points { get; set; }
         [DefaultValue(0)]
         public int UsePoints { get; set; }
+
+        public int? TeacherId { get; set; }
+        public virtual User Teacher { get; set; }
+        public virtual List<User> Students { get; set; }
+
         public virtual Exam CurrentExam { get; set; }
 
+        public virtual School School { get; set; }
 
         public virtual List<Train> Trains{ get; set; }
 

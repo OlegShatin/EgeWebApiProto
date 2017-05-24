@@ -289,9 +289,14 @@
     <Compile Include="Migrations\201705232045042_attempt-to-save-links-list.Designer.cs">
       <DependentUpon>201705232045042_attempt-to-save-links-list.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705240056086_teachers-schools-added.cs" />
+    <Compile Include="Migrations\201705240056086_teachers-schools-added.Designer.cs">
+      <DependentUpon>201705240056086_teachers-schools-added.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ExamsModels\School.cs" />
     <Compile Include="Models\ExamsModels\Badge.cs" />
     <Compile Include="Models\ExamsModels\ExamAppDbContext.cs" />
     <Compile Include="Models\ExamsModels\ExamTask.cs" />
@@ -316,9 +321,11 @@
       <DependentUpon>EmailAccountSettings.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Impls\EmailServiceImpl.cs" />
+    <Compile Include="Services\Impls\SchoolServiceImpl.cs" />
     <Compile Include="Services\Impls\TaskServiceImpl.cs" />
     <Compile Include="Services\Impls\TopicServiceImpl.cs" />
     <Compile Include="Services\Impls\UserServiceImpl.cs" />
+    <Compile Include="Services\ISchoolService.cs" />
     <Compile Include="Services\ITaskService.cs" />
     <Compile Include="Services\ITopicService.cs" />
     <Compile Include="Services\IUserService.cs" />
@@ -353,6 +360,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705232045042_attempt-to-save-links-list.resx">
       <DependentUpon>201705232045042_attempt-to-save-links-list.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705240056086_teachers-schools-added.resx">
+      <DependentUpon>201705240056086_teachers-schools-added.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UploadsConfig.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
