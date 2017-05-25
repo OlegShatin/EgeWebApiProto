@@ -13,10 +13,11 @@ using Microsoft.AspNet.Identity.Owin;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.ApiViewModels.BindingModels;
 using WebApiTest4.Services;
+using WebApiTest4.Util;
 
 namespace WebApiTest4.Controllers
 {
-    [Authorize(Roles = "student")]
+    [Authorize]
     public class TasksController : ApiController
     {
 
@@ -45,6 +46,8 @@ namespace WebApiTest4.Controllers
 
         
         [HttpPost]
+        [Authorize]
+        [ClaimsAuthorize(ClaimTypes.Role, "student")]
         public async Task<IHttpActionResult> PostCheck(TaskAnswersSetBindingModel answers)
         {
             if (answers.list.Any() && ModelState.IsValid)
@@ -63,6 +66,7 @@ namespace WebApiTest4.Controllers
         }
         [HttpGet]
         [ActionName("Train")]
+        [ClaimsAuthorize(ClaimTypes.Role, "student")]
         public IEnumerable<ExamTaskViewModel> GetTrain()
         {
            return _taskService.GenerateNewExamTrain(User

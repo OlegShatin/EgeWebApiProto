@@ -210,6 +210,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiViewModels\AnswerViewModel.cs" />
+    <Compile Include="ApiViewModels\AttemptViewModel.cs" />
+    <Compile Include="ApiViewModels\SchoolViewModel.cs" />
+    <Compile Include="ApiViewModels\TeacherViewModel.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -248,7 +251,10 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RatingController.cs" />
+    <Compile Include="Controllers\SchoolsController.cs" />
+    <Compile Include="Controllers\SolvedController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
+    <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\ThemesController.cs" />
     <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -322,14 +328,17 @@
     </Compile>
     <Compile Include="Services\Impls\EmailServiceImpl.cs" />
     <Compile Include="Services\Impls\SchoolServiceImpl.cs" />
+    <Compile Include="Services\Impls\SolvedTasksServiceImpl.cs" />
     <Compile Include="Services\Impls\TaskServiceImpl.cs" />
     <Compile Include="Services\Impls\TopicServiceImpl.cs" />
     <Compile Include="Services\Impls\UserServiceImpl.cs" />
     <Compile Include="Services\ISchoolService.cs" />
+    <Compile Include="Services\ISolvedTasksService.cs" />
     <Compile Include="Services\ITaskService.cs" />
     <Compile Include="Services\ITopicService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Util\ClaimsAuthorizeAttribute.cs" />
     <Compile Include="Util\NinjectDependencyResolver.cs" />
   </ItemGroup>
   <ItemGroup>

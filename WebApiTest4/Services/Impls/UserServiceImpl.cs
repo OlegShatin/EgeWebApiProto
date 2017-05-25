@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
+using System.Web.Mvc;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.Models.ExamsModels;
 
@@ -17,7 +19,9 @@ namespace WebApiTest4.Services.Impls
         }
         public UserViewModel GetUser(int id)
         {
-           return  GetRatedUserViewModels().FirstOrDefault(x => x.id == id);
+            //if this user is teacher return vm without ratings and points
+           return  _context.Users.Where(x => x.Id == id).OfRole("teacher").ToList().Select(x => new UserViewModel(x, null, null)).FirstOrDefault() ??
+                GetRatedUserViewModels().FirstOrDefault(x => x.id == id);
         }
 
         public IEnumerable<UserViewModel> GetRatingForUser(int userId)
@@ -30,6 +34,7 @@ namespace WebApiTest4.Services.Impls
             
             
                return _context.Users
+                    .OfRole("student")
                     .Select(
                         x => new
                         {
@@ -64,10 +69,29 @@ namespace WebApiTest4.Services.Impls
             dbUser.CurrentExam = _context.Exams.FirstOrDefault(x => x.Id == exam.Id);
             _context.SaveChanges();
         }
-
+        
         public User GetUserById(int id)
         {
             return _context.Users.FirstOrDefault(x => x.Id == id);
+        }
+
+        public TeacherViewModel GetTeacherVMById(int id)
+        {
+            return new TeacherViewModel(GetUserById(id));
+        }
+
+        public IEnumerable<TeacherViewModel> GetTeachers()
+        {
+            return _context
+                .Users
+                .OfRole("teacher")
+                .ToList()
+                .Select(x => new TeacherViewModel(x));
+        }
+
+        public bool UserExists(int id)
+        {
+            return GetUserById(id) != null;
         }
     }
 }

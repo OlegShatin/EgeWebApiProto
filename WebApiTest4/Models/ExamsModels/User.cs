@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -39,5 +40,14 @@ namespace WebApiTest4.Models.ExamsModels
         public virtual List<Badge> Badges { get; set; }
 
         public virtual IEnumerable<UserManualCheckingTaskAttempt> CheckedAttempts { get; set; }
+    }
+
+    static class UserExtesion
+    {
+        public static IQueryable<User> OfRole(this IQueryable<User> source, string role)
+        {
+            return source.Where(x => x.Claims.Any(c => c.ClaimType.Equals(ClaimTypes.Role)
+                                                       && c.ClaimValue.Equals(role)));
+        }
     }
 }

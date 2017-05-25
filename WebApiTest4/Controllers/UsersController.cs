@@ -6,14 +6,27 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
 {
-    [Authorize(Roles = "student")]
+    [Authorize]
     public class UsersController : ApiController
     {
+        private ApplicationUserManager _userManager;
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
         private readonly IUserService _userService;
         public UsersController(IUserService service)
         {
@@ -26,9 +39,26 @@ namespace WebApiTest4.Controllers
         //}
 
         // GET: api/Users/5
-        public UserViewModel Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return _userService.GetUser(id);
+            if (id == 0)
+            {
+                return Ok(_userService.GetUser(User.Identity.GetUserId<int>()));
+            }
+            if (_userService.UserExists(id))
+            {
+                if (UserManager.IsInRole(id, "student"))
+                {
+                    return Ok(_userService.GetUser(id));
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            return NotFound();
+
+
         }
 
         //// POST: api/Users

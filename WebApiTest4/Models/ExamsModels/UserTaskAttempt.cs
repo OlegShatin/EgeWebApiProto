@@ -52,7 +52,7 @@ namespace WebApiTest4.Models.ExamsModels
         public string LinksAsString
         {
             get { return _imagesLinks != null ? string.Join(" ", _imagesLinks) : ""; }
-            set { _imagesLinks = value.Split(' ').ToList(); }
+            set { _imagesLinks = value?.Split(' ').ToList() ?? new List<string>(); }
         }
     }
 }

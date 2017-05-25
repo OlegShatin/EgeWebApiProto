@@ -339,7 +339,7 @@ namespace WebApiTest4.Controllers
                 Name = model.Name,
                 UserName = model.UserName,
                 Email = model.Email,
-                Avatar = model.Avatar,
+                Avatar = "/api/v1/uploads/1.png",
                 CreatedAt = DateTime.Now
             };
             

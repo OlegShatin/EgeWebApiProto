@@ -258,6 +258,10 @@ namespace WebApiTest4.Services.Impls
         {
             //rate each attempt
             trainWithAttempts.TaskAttempts.OfType<UserSimpleTaskAttempt>().ForEach(x => x.Points = AutoRateAnswer(x));
+            if (trainWithAttempts is ExamTrain)
+            {
+                (trainWithAttempts as ExamTrain).Points = trainWithAttempts.TaskAttempts.Sum(x => x.Points);
+            }
             //rate manually
             trainWithAttempts.TaskAttempts.OfType<UserManualCheckingTaskAttempt>().ForEach(x => CheckManually(x));
             //convert to answerViewModel

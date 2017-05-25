@@ -143,6 +143,7 @@ namespace WebApiTest4.Controllers
         }
         public static List<string> AllowedExtensions = new List<string>() {".png", ".jpg", ".jpeg", ".bmp", ".gif"};
         // POST: api/Uploads
+        [Authorize]
         public IHttpActionResult Post()
         {
             var httpRequest = HttpContext.Current.Request;

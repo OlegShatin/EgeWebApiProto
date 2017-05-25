@@ -33,6 +33,7 @@ namespace WebApiTest4.Util
             kernel.Bind<IUserService>().To<UserServiceImpl>().WithConstructorArgument("context", context);
             kernel.Bind<ITopicService>().To<TopicServiceImpl>().WithConstructorArgument("context", context);
             kernel.Bind<ISchoolService>().To<SchoolServiceImpl>().WithConstructorArgument("context", context);
+            kernel.Bind<ISolvedTasksService>().To<SolvedTasksServiceImpl>().WithConstructorArgument("context", context);
         }
     }
 }

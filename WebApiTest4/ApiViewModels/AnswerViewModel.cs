@@ -18,7 +18,7 @@ namespace WebApiTest4.ApiViewModels
         public int type { get; set; }
         public int task_id { get; private set; }
         public string right_answer { get; private set; }
-
-
     }
+
+    
 }

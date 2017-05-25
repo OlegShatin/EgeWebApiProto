@@ -10,7 +10,7 @@ using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
 {
-    [Authorize(Roles = "student")]
+    [Authorize]
     public class ThemesController : ApiController
     {
         private readonly ITopicService _topicService;

@@ -10,7 +10,7 @@ using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
 {
-    [Authorize(Roles = "student")]
+    [Authorize]
     public class RatingController : ApiController
     {
         private readonly IUserService _userService;
