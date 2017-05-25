@@ -309,5 +309,10 @@ namespace WebApiTest4.Services.Impls
                .ToList()
                .Select(x => new ExamTaskViewModel(x));
         }
+
+        public bool TaskExists(int id)
+        {
+            return _dbContext.Tasks.Any(x => x.Id == id);
+        }
     }
 }

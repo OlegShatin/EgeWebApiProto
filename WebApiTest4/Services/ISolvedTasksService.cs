@@ -11,5 +11,6 @@ namespace WebApiTest4.Services
     public interface ISolvedTasksService
     {
         IEnumerable<AttemptViewModel> GetUncheckedAttemptsOfMyStudents(int teacher_id, int offset, int limit);
+        void CheckAttemptsByTeacher(int teacherId, IEnumerable<CheckedAttemptBindigModel> checkedAttempts);
     }
 }

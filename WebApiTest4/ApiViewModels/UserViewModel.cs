@@ -6,7 +6,7 @@ namespace WebApiTest4.ApiViewModels
 {
     public class UserViewModel
     {
-        public UserViewModel(User sourceUser, int? ratingPlace, int? points)
+        public UserViewModel(User sourceUser, int? ratingPlace, int? points, int usePoint)
         {
             id = sourceUser.Id;
             name = sourceUser.Name;
@@ -16,7 +16,7 @@ namespace WebApiTest4.ApiViewModels
             use_point = sourceUser.UsePoints;
             if (sourceUser.Teacher != null) teacher_id = sourceUser.Teacher.Id;
             if (sourceUser.School != null) school_id = sourceUser.School.Id;
-            
+            use_point = usePoint;
             badges = sourceUser.Badges.Select(x => new BadgeViewModel(x)).ToList();
         }
 

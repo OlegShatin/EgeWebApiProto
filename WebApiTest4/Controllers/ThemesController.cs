@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.Services;
 
@@ -20,7 +21,7 @@ namespace WebApiTest4.Controllers
         }
         public IEnumerable<ExamTopicViewModel> Get()
         {
-            return _topicService.GetTopics();
+            return _topicService.GetTopicsForUser(User.Identity.GetUserId<int>());
         }
     }
 }

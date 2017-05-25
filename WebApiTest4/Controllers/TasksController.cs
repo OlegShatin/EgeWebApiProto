@@ -29,6 +29,17 @@ namespace WebApiTest4.Controllers
         }
 
         const int defaultLimit = 20;
+
+        [HttpGet]
+        public IHttpActionResult Get([FromUri]int task_id)
+        {
+
+            if (_taskService.TaskExists(task_id))
+            {
+                return Ok(_taskService.GetTask(task_id));
+            }
+            return NotFound();
+        }
         //GET: api/Tasks?
         [HttpGet]
         public IEnumerable<ExamTaskViewModel> GetByTopic([FromUri]int? topic_id, [FromUri]int? offset, [FromUri]int? limit)

@@ -10,5 +10,6 @@ namespace WebApiTest4.Services
     public interface ITopicService
     {
         IEnumerable<ExamTopicViewModel> GetTopics();
+        IEnumerable<ExamTopicViewModel> GetTopicsForUser(int userId);
     }
 }

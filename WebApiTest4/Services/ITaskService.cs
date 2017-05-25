@@ -15,5 +15,6 @@ namespace WebApiTest4.Services
         IEnumerable<AnswerViewModel> CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId);
         IEnumerable<ExamTaskViewModel> GenerateNewExamTrain(int userId);
         IEnumerable<ExamTaskViewModel> GetTasksByType(int type, int offset, int limit);
+        bool TaskExists(int id);
     }
 }

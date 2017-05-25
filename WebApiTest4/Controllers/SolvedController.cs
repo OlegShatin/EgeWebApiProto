@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using WebApiTest4.ApiViewModels.BindingModels;
 using WebApiTest4.Services;
 using WebApiTest4.Util;
 
@@ -75,8 +78,18 @@ namespace WebApiTest4.Controllers
         }
 
         // POST: api/Solved
-        public void Post([FromBody]string value)
+        public IHttpActionResult Post([FromBody] IEnumerable<CheckedAttemptBindigModel> checkedAttempts)
         {
+            var req = Request;
+            var httpreq = HttpContext.Current.Request;
+            var body = new StreamReader(HttpContext.Current.Request.InputStream).ReadToEnd();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(v => v.Errors).ToString());
+            }
+            _solvedTasksService.CheckAttemptsByTeacher(User.Identity.GetUserId<int>(), checkedAttempts);
+            return Ok();
+
         }
         
     }

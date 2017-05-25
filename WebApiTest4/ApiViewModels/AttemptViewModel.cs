@@ -10,6 +10,7 @@ namespace WebApiTest4.ApiViewModels
     {
         public AttemptViewModel(UserManualCheckingTaskAttempt attempt) : base(attempt.ExamTask)
         {
+            attempt_id = attempt.Id;
             right_answer = attempt.ExamTask.Answer;
             student_id = attempt.Train.User.Id;
             student_answer = new StudentAnswer()
@@ -19,7 +20,7 @@ namespace WebApiTest4.ApiViewModels
                 images = attempt.ImagesLinks
             };
         }
-        
+        public int attempt_id { get; set; }
         public int student_id { get; set; }
         public string right_answer { get; private set; }
         public StudentAnswer student_answer { get; set; }
