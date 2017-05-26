@@ -23,7 +23,8 @@ namespace WebApiTest4.Services.Impls
 
         public IEnumerable<ExamTopicViewModel> GetTopicsForUser(int userId)
         {
-            if (_context.Users.OfRole("student").Any(x => x.Id == userId))
+            var student = _context.Users.OfRole("student").FirstOrDefault(x => x.Id == userId);
+            if (student != null)
             {
                 return
                     _context.TaskTopics.OrderBy(x => x.Id)
@@ -31,14 +32,15 @@ namespace WebApiTest4.Services.Impls
                         .Select(
                             topic =>
                                 new ExamTopicViewModel(topic,
-                                    _context.Users.FirstOrDefault(user => user.Id == userId)?
-                                        .Trains.OfType<FreeTrain>()?
+                                    student.Trains.OfType<FreeTrain>().Any() ?
+                                    student.Trains
+                                        .OfType<FreeTrain>()
                                         .SelectMany(
                                             train =>
                                                 train.TaskAttempts.Where(
                                                     attempt => attempt.Points > 0 && attempt.ExamTask.Topic.Id == topic.Id))
                                         ?.GroupBy(attempt => attempt.ExamTask.Id)
-                                        .Count() ?? 0));
+                                        .Count() ?? 0 : 0));
             }
             return GetTopics();
         }

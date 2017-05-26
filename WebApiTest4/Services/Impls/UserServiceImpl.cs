@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.Models.ExamsModels;
 using WebApiTest4.Util;
+using WebGrease.Css.Extensions;
 
 namespace WebApiTest4.Services.Impls
 {
@@ -39,7 +40,7 @@ namespace WebApiTest4.Services.Impls
 
         private IEnumerable<UserViewModel> GetRatedUserViewModels()
         {
-            return _context.Users
+            var students = _context.Users
                 .OfRole("student")
                 .Select(
                     x => new
@@ -63,13 +64,19 @@ namespace WebApiTest4.Services.Impls
                     }
                 )
                 .OrderByDescending(res => res.points)
-                .ToList()
-                .Select(
+                .ToList();
+            //check need add some badges
+            students.Select(x => x.user).AddBadgesIfHaveNot();
+            _context.SaveChanges();
+            return students.Select(
                     (res, i) =>
                         new UserViewModel(res.user, (i + 1), res.points,
                             Helpers.GetEgePoints(
-                                res.user.Trains.OfType<ExamTrain>()
-                                    .Max(train => train.TaskAttempts.Sum(attempt => attempt.Points))))
+                                res.user.Trains.OfType<ExamTrain>().Any()
+                                    ? res.user.Trains.OfType<ExamTrain>()
+                                        .Max(train => train.TaskAttempts?.Sum(attempt => attempt.Points) ?? 0)
+                                    : 0)
+                        )
                 );
         }
 
@@ -104,6 +111,81 @@ namespace WebApiTest4.Services.Impls
         public bool UserExists(int id)
         {
             return GetUserById(id) != null;
+        }
+    }
+
+    public static class BadgesUsersExtension
+    {
+        private const string ImagesStoragePrefix = "/api/v1/uploads/";
+        private const string AllTasksFromTopic = "ALL_TASKS_FROM_TOPIC_";
+        private const string GotCountOfTasks = "GOT_COUNT_OF_TASKS_";
+        private const string GoodExamPoints = "GOOD_EXAM_POINTS";
+        private const int GoodPointsBorder = 56;
+        private static readonly int[] Counts = new[] {10, 50, 100, 500};
+
+        public static IEnumerable<User> AddBadgesIfHaveNot(this IEnumerable<User> users)
+        {
+            users.ForEach(user =>
+            {
+                if (user.Trains.Any())
+                {
+                    //#1 badge check in free train solved all tasks
+                    user.CurrentExam?.TaskTopics.ForEach(topic =>
+                    {
+                        //user already has this badge
+                        if (!user.Badges.Any(b => b.Description.Equals(AllTasksFromTopic + topic.Id)))
+                        {
+                            //user has solved all task from this topic
+                            if (topic.ExamTasks.Count == (user.Trains.OfType<FreeTrain>().Any()
+                                    ? user.Trains.OfType<FreeTrain>()
+                                          .SelectMany(
+                                              train =>
+                                                  train.TaskAttempts.Where(
+                                                      attempt =>
+                                                          attempt.Points > 0 && attempt.ExamTask.Topic.Id == topic.Id))
+                                          ?.GroupBy(attempt => attempt.ExamTask.Id)
+                                          .Count() ?? 0
+                                    : 0))
+                            {
+                                user.Badges.Add(new Badge()
+                                {
+                                    Description = AllTasksFromTopic + topic.Id,
+                                    ImageSrc = ImagesStoragePrefix + AllTasksFromTopic + ".png"
+                                });
+                            }
+                        }
+                    });
+
+                    //#2 badge check user got enougth task
+                    var actualCount = user.Trains.SelectMany(t => t.TaskAttempts).Where(att => att.Points > 0).GroupBy(x => x.ExamTask.Id).Count();
+                    foreach (var count in Counts)
+                    {
+                        if (!user.Badges.Any(b => b.Description.Equals(GotCountOfTasks + count)) && actualCount >= count)
+                        {
+                            user.Badges.Add(new Badge()
+                            {
+                                Description = GotCountOfTasks + count,
+                                ImageSrc = ImagesStoragePrefix + GotCountOfTasks + ".png"
+                            });
+                        }
+                    }
+
+                    //#3 badge check user got good points
+                    if (!user.Badges.Any(b => b.Description.Equals(GoodExamPoints)) &&
+                        GoodPointsBorder < (user.Trains.OfType<ExamTrain>().Any()
+                            ? user.Trains.OfType<ExamTrain>()
+                                .Max(train => train.TaskAttempts?.Sum(attempt => attempt.Points) ?? 0)
+                            : 0))
+                    {
+                        user.Badges.Add(new Badge()
+                        {
+                            Description = GotCountOfTasks,
+                            ImageSrc = ImagesStoragePrefix + GoodExamPoints + ".png"
+                        });
+                    }
+                }
+            });
+            return users;
         }
     }
 }

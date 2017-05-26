@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 using Org.BouncyCastle.Asn1.X509;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.ApiViewModels.BindingModels;
@@ -106,15 +107,20 @@ namespace WebApiTest4.Services.Impls
                 if (train == null) return empty;
                 train.User = user;
                 var trainWithAttempts = AddAttemptsToTrain(train, answers);
-                var result = CheckAnswers(trainWithAttempts);
+                var resultTrain = CheckAnswers(trainWithAttempts);
+                resultTrain = ProccessBadges(resultTrain);
                 _dbContext.SaveChanges();
-                return result;
+                return TrainToAnswersVmList(resultTrain);
 
             }
             return empty;
         }
 
-        
+        private Train ProccessBadges(Train resultTrain)
+        {
+            return resultTrain;
+        }
+
 
         private Train AddAttemptsToTrain(Train rawTrain, IEnumerable<TaskAnswerBindingModel> answers)
         {
@@ -254,7 +260,7 @@ namespace WebApiTest4.Services.Impls
             return train;
         }
 
-        private IEnumerable<AnswerViewModel> CheckAnswers(Train trainWithAttempts)
+        private Train CheckAnswers(Train trainWithAttempts)
         {
             //rate each attempt
             trainWithAttempts.TaskAttempts.OfType<UserSimpleTaskAttempt>().ForEach(x => x.Points = AutoRateAnswer(x));
@@ -265,7 +271,12 @@ namespace WebApiTest4.Services.Impls
             //rate manually
             trainWithAttempts.TaskAttempts.OfType<UserManualCheckingTaskAttempt>().ForEach(x => CheckManually(x));
             //convert to answerViewModel
-            return trainWithAttempts.TaskAttempts.ToList().Select(x => new AnswerViewModel(x.ExamTask, x.Points));
+            return trainWithAttempts;
+        }
+
+        private static IEnumerable<AnswerViewModel> TrainToAnswersVmList(Train train)
+        {
+            return train.TaskAttempts.ToList().Select(x => new AnswerViewModel(x.ExamTask, x.Points));
         }
 
         private void CheckManually(UserManualCheckingTaskAttempt userManualCheckingTaskAttempt)

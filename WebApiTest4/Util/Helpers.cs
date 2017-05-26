@@ -54,7 +54,7 @@ namespace WebApiTest4.Util
             {
                 return EgePointsMap[points];
             }
-            catch (KeyNotFoundException exception)
+            catch (Exception exception)
             {
                 return 0;
             }

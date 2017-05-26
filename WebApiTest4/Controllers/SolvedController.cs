@@ -80,9 +80,7 @@ namespace WebApiTest4.Controllers
         // POST: api/Solved
         public IHttpActionResult Post([FromBody] IEnumerable<CheckedAttemptBindigModel> checkedAttempts)
         {
-            var req = Request;
-            var httpreq = HttpContext.Current.Request;
-            var body = new StreamReader(HttpContext.Current.Request.InputStream).ReadToEnd();
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(v => v.Errors).ToString());

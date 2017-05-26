@@ -8,6 +8,7 @@ using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using WebApiTest4.ApiViewModels;
+using WebApiTest4.Models.ExamsModels;
 using WebApiTest4.Services;
 
 namespace WebApiTest4.Controllers
@@ -47,7 +48,7 @@ namespace WebApiTest4.Controllers
             }
             if (_userService.UserExists(id))
             {
-                if (UserManager.IsInRole(id, "student"))
+                if (UserManager.IsInClaimRole(id, "student"))
                 {
                     return Ok(_userService.GetUser(id));
                 }

@@ -42,7 +42,7 @@ namespace WebApiTest4.Controllers
         // GET: api/Teachers/5
         public IHttpActionResult Get(int id)
         {
-            if (UserManager.IsInRole(id, "teacher"))
+            if (UserManager.IsInClaimRole(id, "teacher"))
             {
                 return Ok(_userService.GetTeacherVMById(id));
             }

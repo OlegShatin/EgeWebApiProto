@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -90,6 +92,11 @@ namespace WebApiTest4
                 
             }
             return manager;
+        }
+
+        public bool IsInClaimRole(int userId, string role)
+        {
+            return this.GetClaims(userId).Any(x => x.Type.Equals(ClaimTypes.Role) && x.Value.Equals(role));
         }
     }
 }
