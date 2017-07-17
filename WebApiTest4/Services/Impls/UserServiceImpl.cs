@@ -112,6 +112,16 @@ namespace WebApiTest4.Services.Impls
         {
             return GetUserById(id) != null;
         }
+
+        public void ClearDataForTeacher(int userId)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Id == userId);
+            if (user != null)
+            {
+                _context.Badges.RemoveRange(user.Badges);
+                _context.Trains.RemoveRange(user.Trains);
+            }
+        }
     }
 
     public static class BadgesUsersExtension

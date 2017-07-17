@@ -18,12 +18,15 @@ namespace WebApiTest4.Controllers
             _schoolService = service;
         }
         // GET: api/Schools
+        [HttpGet]
         public IEnumerable<SchoolViewModel> Get()
         {
             return _schoolService.GetSchools();
         }
 
         // GET: api/Schools/5
+        [HttpGet]
+        [Route("api/Scools/{id}")]
         public IHttpActionResult Get(int id)
         {
             if (_schoolService.SchoolExists(id))

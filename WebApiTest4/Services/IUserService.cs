@@ -17,5 +17,6 @@ namespace WebApiTest4.Services
         TeacherViewModel GetTeacherVMById(int id);
         IEnumerable<TeacherViewModel> GetTeachers();
         bool UserExists(int id);
+        void ClearDataForTeacher(int userId);
     }
 }

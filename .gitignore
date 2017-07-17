@@ -244,3 +244,4 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /WebApiTest4/Services/Impls/EmailAccountSettings.resx
+/WebApiTest4/Controllers/SecretTeacherKey.resx

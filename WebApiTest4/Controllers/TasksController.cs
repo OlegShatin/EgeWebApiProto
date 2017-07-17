@@ -59,7 +59,7 @@ namespace WebApiTest4.Controllers
         [HttpPost]
         [Authorize]
         [ClaimsAuthorize(ClaimTypes.Role, "student")]
-        public async Task<IHttpActionResult> PostCheck(TaskAnswersSetBindingModel answers)
+        public IHttpActionResult PostCheck(TaskAnswersSetBindingModel answers)
         {
             if (answers.list.Any() && ModelState.IsValid)
             {

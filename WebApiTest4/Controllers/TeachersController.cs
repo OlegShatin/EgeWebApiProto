@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
+using System.Resources;
+using System.Security.Claims;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using WebApiTest4.ApiViewModels;
 using WebApiTest4.Services;
+using WebApiTest4.Util;
 
 namespace WebApiTest4.Controllers
 {
@@ -39,7 +43,7 @@ namespace WebApiTest4.Controllers
             return _userService.GetTeachers();
         }
 
-        // GET: api/Teachers/5
+        // GET: api/v1/Teachers/5
         public IHttpActionResult Get(int id)
         {
             if (UserManager.IsInClaimRole(id, "teacher"))
@@ -50,6 +54,24 @@ namespace WebApiTest4.Controllers
             {
                 return NotFound();
             }
+        }
+        [ClaimsAuthorize(ClaimTypes.Role, "student")]
+        public IHttpActionResult PostBecome([FromBody] string key)
+        {
+            var rm = new ResourceManager("WebApiTest4.Controllers.SecretTeacherKey", Assembly.GetExecutingAssembly());
+            if (rm.GetString("key").Equals(key))
+            {
+                var userId = User.Identity.GetUserId<int>();
+                UserManager.RemoveClaim(userId, new Claim(ClaimTypes.Role, "student"));
+                UserManager.AddClaim(userId, new Claim(ClaimTypes.Role, "teacher"));
+                _userService.ClearDataForTeacher(userId);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+                
         }
         
     }

@@ -12,11 +12,11 @@ namespace WebApiTest4.Services.Impls
 {
     public class TaskServiceImpl : ITaskService
     {
-
         public TaskServiceImpl(ExamAppDbContext context)
         {
             _dbContext = context;
         }
+
         private ExamAppDbContext _dbContext;
 
         public ExamTaskViewModel GetTask(int id)
@@ -34,7 +34,9 @@ namespace WebApiTest4.Services.Impls
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
             {
-                var unfinishedTrain = user.Trains.OfType<ExamTrain>().TrainsOfUsersCurrentExamType()?.FirstOrDefault(x => x.FinishTime == null);
+                var unfinishedTrain =
+                    user.Trains.OfType<ExamTrain>()
+                        .TrainsOfUsersCurrentExamType()?.FirstOrDefault(x => x.FinishTime == null);
                 if (unfinishedTrain != null)
                 {
                     unfinishedTrain.FinishTime = DateTime.Now;
@@ -46,25 +48,25 @@ namespace WebApiTest4.Services.Impls
                 Random rnd = new Random();
                 //get one task from each topic at fixed random examNumber position
                 var lastIndexOfTasksList = _dbContext
-                    .TaskTopics
-                    .FirstOrDefault(x => x.Exam.Id == user.CurrentExam.Id)?
-                    .ExamTasks
-                    .Count()?? 0;
+                                               .TaskTopics
+                                               .FirstOrDefault(x => x.Exam.Id == user.CurrentExam.Id)?
+                                               .ExamTasks
+                                               .Count() ?? 0;
                 if (lastIndexOfTasksList == 0)
                 {
                     return new List<ExamTaskViewModel>();
                 }
                 var examNumber = rnd.Next(
-                    0, 
+                    0,
                     lastIndexOfTasksList - 1
-                    );
+                );
                 train.TaskAttempts = _dbContext
                     .TaskTopics
                     .Where(x => x.Exam.Id == user.CurrentExam.Id)
                     .ToList()
                     .Select(x => GenerateNewEmptyAttempt(x.ExamTasks.ElementAt(examNumber)))
                     .ToList();
-                    
+
                 //save to db
                 _dbContext.Trains.Add(train);
                 _dbContext.SaveChanges();
@@ -92,13 +94,12 @@ namespace WebApiTest4.Services.Impls
                 .Take(limit)
                 .ToList()
                 .Select(x => new ExamTaskViewModel(x));
-
-            
         }
 
-        public IEnumerable<AnswerViewModel> CheckAnswers(string trainType, IEnumerable<TaskAnswerBindingModel> answers, int userId)
+        public IEnumerable<AnswerViewModel> CheckAnswers(string trainType,
+                                                            IEnumerable<TaskAnswerBindingModel> answers,
+                                                            int userId)
         {
-            
             var empty = new List<AnswerViewModel>();
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
             if (user != null)
@@ -111,7 +112,6 @@ namespace WebApiTest4.Services.Impls
                 resultTrain = ProccessBadges(resultTrain);
                 _dbContext.SaveChanges();
                 return TrainToAnswersVmList(resultTrain);
-
             }
             return empty;
         }
@@ -127,13 +127,12 @@ namespace WebApiTest4.Services.Impls
             if (rawTrain.GetType() == typeof(FreeTrain))
             {
                 return AddAttemptsToFreeTrain((FreeTrain) rawTrain, answers);
-
             }
             else
             {
                 if (rawTrain.GetType() == typeof(ExamTrain))
                 {
-                    return AddAttemptsToExamTrain((ExamTrain)rawTrain, answers);
+                    return AddAttemptsToExamTrain((ExamTrain) rawTrain, answers);
                 }
                 else
                 {
@@ -146,17 +145,17 @@ namespace WebApiTest4.Services.Impls
         {
             //get pairs attempt - answer and add answer value to attempt
             //attempts in exam train defined already 
-            
+
             train.TaskAttempts
                 .Join(
                     answers,
                     attempt => attempt.ExamTask.Id,
                     ans => ans.id,
                     ((ta, ua) => new
-                        {
-                            bindingModel = ua,
-                            attempt = ta
-                        })
+                    {
+                        bindingModel = ua,
+                        attempt = ta
+                    })
                 )
                 .ForEach(
                     x =>
@@ -188,7 +187,7 @@ namespace WebApiTest4.Services.Impls
             //add additional params if attempt checking manually
             if (attempt is UserManualCheckingTaskAttempt)
             {
-                UserManualCheckingTaskAttempt attemptOfManualCheckingTask = (UserManualCheckingTaskAttempt)attempt;
+                UserManualCheckingTaskAttempt attemptOfManualCheckingTask = (UserManualCheckingTaskAttempt) attempt;
                 attemptOfManualCheckingTask.Comment = model.comment;
                 attemptOfManualCheckingTask.ImagesLinks = model.images.ToList();
                 return attemptOfManualCheckingTask;
@@ -242,7 +241,10 @@ namespace WebApiTest4.Services.Impls
                 if (trainType.ToLower().Equals("exam"))
                 {
                     //searching unfinished ege trains
-                    train = user.Trains.OfType<ExamTrain>().TrainsOfUsersCurrentExamType().FirstOrDefault(x => x.FinishTime == null);
+                    train =
+                        user.Trains.OfType<ExamTrain>()
+                            .TrainsOfUsersCurrentExamType()
+                            .FirstOrDefault(x => x.FinishTime == null);
                     if (train != null)
                     {
                         train.FinishTime = DateTime.Now;
@@ -288,7 +290,7 @@ namespace WebApiTest4.Services.Impls
 
         private int AutoRateAnswer(UserTaskAttempt attempt)
         {
-            if (attempt.UserAnswer != null 
+            if (attempt.UserAnswer != null
                 && attempt.UserAnswer.Trim()
                     .Replace(" ", "")
                     .ToLowerInvariant()
@@ -312,13 +314,13 @@ namespace WebApiTest4.Services.Impls
         {
             bool isShortType = type == 0;
             return _dbContext
-               .Tasks
-               .Where(x => x.Topic.IsShort == isShortType)
-               .OrderBy(x => x.Id)
-               .Skip(offset)
-               .Take(limit)
-               .ToList()
-               .Select(x => new ExamTaskViewModel(x));
+                .Tasks
+                .Where(x => x.Topic.IsShort == isShortType)
+                .OrderBy(x => x.Id)
+                .Skip(offset)
+                .Take(limit)
+                .ToList()
+                .Select(x => new ExamTaskViewModel(x));
         }
 
         public bool TaskExists(int id)
