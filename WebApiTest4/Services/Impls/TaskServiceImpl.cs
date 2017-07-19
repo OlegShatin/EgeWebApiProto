@@ -19,13 +19,23 @@ namespace WebApiTest4.Services.Impls
 
         private ExamAppDbContext _dbContext;
 
-        public ExamTaskViewModel GetTask(int id)
+        public ExamTaskViewModel GetTask(int id, int userId)
         {
+            var user = _dbContext.Users.OfRole("student").FirstOrDefault(x => x.Id == userId);
+            int? userPoint = null;
+            if (user != null)
+            {
+                userPoint = user.Trains.OfType<FreeTrain>().Any()
+                    ? user.Trains.OfType<FreeTrain>().SelectMany(t => t.TaskAttempts)
+                        .Where(ta => ta.ExamTask.Id == id)
+                        .Max(ta => ta.Points)
+                    : 0;
+            }
             return _dbContext
                 .Tasks
                 .Where(x => x.Id == id)
                 .ToList()
-                .Select(x => new ExamTaskViewModel(x))
+                .Select(x => new ExamTaskViewModel(x, userPoint))
                 .FirstOrDefault();
         }
 
@@ -82,13 +92,38 @@ namespace WebApiTest4.Services.Impls
             }
         }
 
-        public IEnumerable<ExamTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit)
+        public IEnumerable<ExamTaskViewModel> GetSortedTasks(int? topicId, int offset, int limit, int userId)
         {
-            //var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
-
-            return _dbContext
+            var query = _dbContext
                 .Tasks
-                .Where(x => topicId == null || x.Topic.Id == topicId) //if there is no topic then just first tasks
+                .Where(x => topicId == null || x.Topic.Id == topicId);
+            //var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
+            var user = _dbContext.Users.OfRole("student").FirstOrDefault(x => x.Id == userId);
+            if (user != null)
+            {
+                if (user.Trains.OfType<FreeTrain>().Any())
+                {
+                    return query.Join(
+                            user.Trains.OfType<FreeTrain>()
+                                .SelectMany(train => train.TaskAttempts)
+                                .GroupBy(ta => ta.ExamTask)
+                                .Select(g => new {taskId = g.Key.Id, userPoint = g.Max(ta => ta.Points)}),
+                            task => task.Id,
+                            res => res.taskId, (task, res) => new {Task = task, UserPoints = res.userPoint})
+                        .OrderBy(x => x.Task.Id)
+                        .Skip(offset)
+                        .Take(limit)
+                        .ToList()
+                        .Select(x => new ExamTaskViewModel(x.Task, x.UserPoints));
+                }
+
+                return query.OrderBy(x => x.Id).Skip(offset)
+                    .Take(limit)
+                    .ToList()
+                    .Select(x => new ExamTaskViewModel(x, 0));
+            }
+
+            return query //if there is no topic then just first tasks
                 .OrderBy(x => x.Id)
                 .Skip(offset)
                 .Take(limit)
@@ -97,8 +132,8 @@ namespace WebApiTest4.Services.Impls
         }
 
         public IEnumerable<AnswerViewModel> CheckAnswers(string trainType,
-                                                            IEnumerable<TaskAnswerBindingModel> answers,
-                                                            int userId)
+            IEnumerable<TaskAnswerBindingModel> answers,
+            int userId)
         {
             var empty = new List<AnswerViewModel>();
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == userId);
@@ -310,17 +345,43 @@ namespace WebApiTest4.Services.Impls
             return task.Topic.PointsPerTask == attempt.Points;
         }
 
-        public IEnumerable<ExamTaskViewModel> GetTasksByType(int type, int offset, int limit)
+        public IEnumerable<ExamTaskViewModel> GetTasksByType(int type, int offset, int limit, int userId)
         {
             bool isShortType = type == 0;
-            return _dbContext
+            var query = _dbContext
                 .Tasks
-                .Where(x => x.Topic.IsShort == isShortType)
-                .OrderBy(x => x.Id)
-                .Skip(offset)
-                .Take(limit)
-                .ToList()
-                .Select(x => new ExamTaskViewModel(x));
+                .Where(x => x.Topic.IsShort == isShortType);
+            var user = _dbContext.Users.OfRole("student").FirstOrDefault(x => x.Id == userId);
+            if (user != null)
+            {
+                if (user.Trains.OfType<FreeTrain>().Any())
+                {
+                    return query.Join(
+                            user.Trains.OfType<FreeTrain>()
+                                .SelectMany(train => train.TaskAttempts)
+                                .GroupBy(ta => ta.ExamTask)
+                                .Select(g => new {taskId = g.Key.Id, userPoint = g.Max(ta => ta.Points)}),
+                            task => task.Id,
+                            res => res.taskId, (task, res) => new {Task = task, UserPoints = res.userPoint})
+                        .OrderBy(x => x.Task.Id)
+                        .Skip(offset)
+                        .Take(limit)
+                        .ToList()
+                        .Select(x => new ExamTaskViewModel(x.Task, x.UserPoints));
+                }
+
+                return query.OrderBy(x => x.Id).Skip(offset)
+                    .Take(limit)
+                    .ToList()
+                    .Select(x => new ExamTaskViewModel(x, 0));
+            }
+
+            return
+                query.OrderBy(x => x.Id)
+                    .Skip(offset)
+                    .Take(limit)
+                    .ToList()
+                    .Select(x => new ExamTaskViewModel(x));
         }
 
         public bool TaskExists(int id)

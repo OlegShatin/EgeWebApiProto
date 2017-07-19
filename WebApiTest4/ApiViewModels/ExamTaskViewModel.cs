@@ -4,7 +4,7 @@ namespace WebApiTest4.ApiViewModels
 {
     public class ExamTaskViewModel
     {
-        public ExamTaskViewModel(ExamTask sourseTask)
+        public ExamTaskViewModel(ExamTask sourseTask, int? user_points = null)
         {
             id = sourseTask.Id;
             text = sourseTask.Text;
@@ -12,6 +12,7 @@ namespace WebApiTest4.ApiViewModels
             type = sourseTask.Topic.IsShort ? 0 : 1;
             code = sourseTask.Topic.Code;
             max_points = sourseTask.Topic.PointsPerTask;
+            this.user_points = user_points;
         }
 
         public int topic_id { get; set; }
@@ -20,6 +21,7 @@ namespace WebApiTest4.ApiViewModels
         public string text { get; private set; }
         public string code { get; private set; }
         public int max_points { get; private set; }
+        public int? user_points { get; private set; }
 
 
     }

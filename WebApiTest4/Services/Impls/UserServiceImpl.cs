@@ -120,6 +120,7 @@ namespace WebApiTest4.Services.Impls
             {
                 _context.Badges.RemoveRange(user.Badges);
                 _context.Trains.RemoveRange(user.Trains);
+                _context.SaveChanges();
             }
         }
     }

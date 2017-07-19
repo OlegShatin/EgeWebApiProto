@@ -36,7 +36,7 @@ namespace WebApiTest4.Controllers
 
             if (_taskService.TaskExists(task_id))
             {
-                return Ok(_taskService.GetTask(task_id));
+                return Ok(_taskService.GetTask(task_id, User.Identity.GetUserId<int>()));
             }
             return NotFound();
         }
@@ -45,14 +45,14 @@ namespace WebApiTest4.Controllers
         public IEnumerable<ExamTaskViewModel> GetByTopic([FromUri]int? topic_id, [FromUri]int? offset, [FromUri]int? limit)
         {
 
-            return _taskService.GetSortedTasks(topic_id, offset ?? 0, limit ?? defaultLimit);
+            return _taskService.GetSortedTasks(topic_id, offset ?? 0, limit ?? defaultLimit, User.Identity.GetUserId<int>());
         }
         //GET: api/Tasks?
         [HttpGet]
         public IEnumerable<ExamTaskViewModel> GetByType([FromUri]int? type, [FromUri]int? offset, [FromUri]int? limit)
         {
 
-            return _taskService.GetTasksByType(type ?? 0, offset ?? 0, limit ?? defaultLimit);
+            return _taskService.GetTasksByType(type ?? 0, offset ?? 0, limit ?? defaultLimit, User.Identity.GetUserId<int>());
         }
 
         
