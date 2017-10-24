@@ -103,7 +103,7 @@ namespace WebApiTest4.Services.Impls
             {
                 if (user.Trains.OfType<FreeTrain>().Any())
                 {
-                    return query.Join(
+                    return query.ToList().Join(
                             user.Trains.OfType<FreeTrain>()
                                 .SelectMany(train => train.TaskAttempts)
                                 .GroupBy(ta => ta.ExamTask)
